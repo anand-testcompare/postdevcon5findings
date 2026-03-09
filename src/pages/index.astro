@@ -2,18 +2,16 @@
 import { getCollection } from 'astro:content';
 import SiteShell from '../layouts/SiteShell.astro';
 import StatusPill from '../components/StatusPill.astro';
-import { homepageHighlights, importanceOrder, timelineEvents, workflowSteps } from '../data/research';
+import { importanceOrder } from '../data/research';
+import { compareFirstSeenDesc, packageMeta } from '../data/packageMeta';
 
-const topics = (await getCollection('topics')).sort(
-	(a, b) => importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
-);
 const packages = (await getCollection('packages')).sort(
-	(a, b) => importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
+	(a, b) =>
+		compareFirstSeenDesc(a.data.firstSeen, b.data.firstSeen)
+		|| importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
 );
 const seams = await getCollection('seams');
-
-const featuredTopics = topics.slice(0, 3);
-const featuredPackages = packages.slice(0, 6);
+const recentPackages = packages.slice(0, 5);
 ---
 
 <SiteShell
@@ -21,147 +19,113 @@ const featuredPackages = packages.slice(0, 6);
 	description="A research atlas of Palantir's public OSDK, compiler, and private-boundary signals."
 	showHero={false}
 >
-	<section class="hero-grid">
-		<div class="hero-panel">
-			<p class="eyebrow">Post-DevCon 5 Findings</p>
-			<h1>Map the public OSDK stack without drowning in package noise.</h1>
-			<p class="lede">
-				This site distills the newer Palantir developer surfaces into a readable atlas: what is
-				public, what is preview-grade, where the private seams still show, and how Maker,
-				converters, discovery, SDK generation, app bootstrapping, and deployment fit together.
-			</p>
-			<div class="legend">
-				<span>public</span>
-				<span>mixed</span>
-				<span>preview</span>
-				<span>experimental</span>
-			</div>
-			<div class="cta-row">
-				<a class="button-link button-primary" href="/topics">Read the topic hubs</a>
-				<a class="button-link button-secondary" href="/packages">Browse package dossiers</a>
-			</div>
-		</div>
-		<div class="section">
-			<div class="section-header">
-				<div>
-					<p class="eyebrow">At a glance</p>
-					<h2>What changed</h2>
-				</div>
-			</div>
-			<div class="card-grid">
-				<div class="metric span-6">
-					<strong>{topics.length}</strong>
-					<span>core topic hubs seeded from the research pack</span>
-				</div>
-				<div class="metric span-6">
-					<strong>{packages.length}</strong>
-					<span>package dossiers covering the most important surfaces</span>
-				</div>
-				<div class="metric span-6">
-					<strong>{seams.length}</strong>
-					<span>public-private seam patterns with evidence-backed interpretations</span>
-				</div>
-				<div class="metric span-6">
-					<strong>{timelineEvents.length}</strong>
-					<span>major timeline markers showing the stack opening over time</span>
-				</div>
-			</div>
+	<section class="section dense-summary">
+		<p class="eyebrow">Post-DevCon 5 Findings</p>
+		<h1>Public surface area expanded beyond the original OSDK story.</h1>
+		<p class="lede">
+			Net-new signals include a real ontology-as-code DSL, a visible compiler/backend rewrite,
+			preview converter/generator bridges, local function-testing helpers, thin AI proxy helpers,
+			and adjacent Python runtime/connectivity libraries. The sharpest unresolved seam is still
+			Maker's dependency on private TypeScript discovery.
+		</p>
+		<div class="meta-row">
+			<span>{packages.length} packages tracked</span>
+			<span>{seams.length} seam patterns</span>
+			<span>technical audience / low-commentary view</span>
 		</div>
 	</section>
 
 	<section class="section">
 		<div class="section-header">
 			<div>
-				<p class="eyebrow">Top findings</p>
-				<h2>The short thesis</h2>
-			</div>
-			<a class="link-arrow" href="/seams">See seam map -></a>
-		</div>
-		<ul class="workflow-list">
-			{homepageHighlights.map((item) => <li>{item}</li>)}
-		</ul>
-	</section>
-
-	<section class="section">
-		<div class="section-header">
-			<div>
-				<p class="eyebrow">Start here</p>
-				<h2>Topic hubs</h2>
-			</div>
-			<a class="link-arrow" href="/topics">All topics -></a>
-		</div>
-		<div class="card-grid">
-			{featuredTopics.map((topic) => (
-				<article class="card span-4">
-					<StatusPill status={topic.data.status} />
-					<h3>{topic.data.title}</h3>
-					<p>{topic.data.summary}</p>
-					<div class="meta-row">
-						<span>{topic.data.relatedPackages.length} related packages</span>
-						<span>{topic.data.relatedSeams.length} seam links</span>
-					</div>
-					<p><a class="link-arrow" href={`/topics/${topic.id}`}>Open topic -></a></p>
-				</article>
-			))}
-		</div>
-	</section>
-
-	<section class="section">
-		<div class="section-header">
-			<div>
-				<p class="eyebrow">Package map</p>
-				<h2>Most important surfaces</h2>
-			</div>
-			<a class="link-arrow" href="/packages">All packages -></a>
-		</div>
-		<div class="card-grid">
-			{featuredPackages.map((entry) => (
-				<article class="card span-4">
-					<StatusPill status={entry.data.status} />
-					<h3>{entry.data.title}</h3>
-					<p>{entry.data.summary}</p>
-					<div class="chip-row">
-						<span class="chip">{entry.data.packageName}</span>
-						<span class="chip">first seen {entry.data.firstSeen}</span>
-					</div>
-					<p><a class="link-arrow" href={`/packages/${entry.id}`}>Read dossier -></a></p>
-				</article>
-			))}
-		</div>
-	</section>
-
-	<section class="section">
-		<div class="section-header">
-			<div>
-				<p class="eyebrow">Mental model</p>
-				<h2>Workflow lens</h2>
-			</div>
-		</div>
-		<ol class="workflow-list">
-			{workflowSteps.map((step) => (
-				<li>
-					<strong>{step.title}</strong>
-					<div>{step.detail}</div>
-				</li>
-			))}
-		</ol>
-	</section>
-
-	<section class="section">
-		<div class="section-header">
-			<div>
-				<p class="eyebrow">Timeline</p>
-				<h2>How the public story opened up</h2>
+				<p class="eyebrow">Newest first</p>
+				<h2>Recent public additions</h2>
 			</div>
 			<a class="link-arrow" href="/timeline">Full timeline -></a>
 		</div>
 		<ul class="timeline-list">
-			{timelineEvents.map((event) => (
-				<li>
-					<strong>{event.date} · {event.label}</strong>
-					<div>{event.summary}</div>
-				</li>
-			))}
+			{recentPackages.map((entry) => {
+				const meta = packageMeta[entry.id];
+				return (
+					<li>
+						<strong>{entry.data.firstSeen} · {entry.data.packageName}</strong>
+						<div>{entry.data.summary}</div>
+						<div class="meta-row">
+							<StatusPill status={entry.data.status} />
+							{meta?.inspectedVersion && <span>inspected {meta.inspectedVersion}</span>}
+							<a class="link-arrow" href={`/packages/${entry.id}`}>details -></a>
+						</div>
+					</li>
+				);
+			})}
 		</ul>
+	</section>
+
+	<section class="section">
+		<div class="section-header">
+			<div>
+				<p class="eyebrow">Inventory</p>
+				<h2>Tracked packages</h2>
+			</div>
+			<a class="link-arrow" href="/packages">Inventory view -></a>
+		</div>
+		<div class="table-wrap">
+			<table class="dense-table">
+				<thead>
+					<tr>
+						<th>First seen</th>
+						<th>Package</th>
+						<th>Inspected</th>
+						<th>Status</th>
+						<th>Why it matters</th>
+						<th>Links</th>
+					</tr>
+				</thead>
+				<tbody>
+					{packages.map((entry) => {
+						const meta = packageMeta[entry.id] ?? {};
+						return (
+							<tr>
+								<td class="mono">{entry.data.firstSeen}</td>
+								<td>
+									<a href={`/packages/${entry.id}`}>{entry.data.packageName}</a>
+									<div class="table-subtle">{entry.data.kind}</div>
+								</td>
+								<td class="mono">{meta.inspectedVersion ?? '-'}</td>
+								<td><StatusPill status={entry.data.status} /></td>
+								<td>{entry.data.summary}</td>
+								<td>
+									<div class="table-links">
+										{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
+										{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+									</div>
+								</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="section-header">
+			<div>
+				<p class="eyebrow">Seams</p>
+				<h2>Highest-signal boundary issues</h2>
+			</div>
+			<a class="link-arrow" href="/seams">All seams -></a>
+		</div>
+		<div class="card-grid compact-grid">
+			{seams.map((entry) => (
+				<article class="card span-4 compact-card">
+					<StatusPill status={entry.data.status} />
+					<h3>{entry.data.title}</h3>
+					<p>{entry.data.summary}</p>
+					<p><a class="link-arrow" href={`/seams/${entry.id}`}>detail -></a></p>
+				</article>
+			))}
+		</div>
 	</section>
 </SiteShell>
