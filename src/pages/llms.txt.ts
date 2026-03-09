@@ -4,7 +4,8 @@ import { getCollection } from 'astro:content';
 export const prerender = true;
 
 export const GET: APIRoute = async ({ site }) => {
-	const base = site?.toString().replace(/\/$/, '') ?? 'https://postdevcon5findings.example';
+	const base = site?.toString().replace(/\/$/, '');
+	const link = (path: string) => (base ? `${base}${path}` : path);
 	const topics = await getCollection('topics');
 	const packages = await getCollection('packages');
 	const seams = await getCollection('seams');
@@ -13,18 +14,18 @@ export const GET: APIRoute = async ({ site }) => {
 		'Post-DevCon 5 Findings',
 		'A research atlas for Palantir public OSDK, ontology-as-code, and public-private package seams.',
 		'',
-		`Base: ${base}`,
+		`Base: ${base ?? 'relative URLs'}`,
 		'',
 		'Topics:',
-		...topics.map((entry) => `- ${entry.data.title}: ${base}/topics/${entry.id}`),
+		...topics.map((entry) => `- ${entry.data.title}: ${link(`/topics/${entry.id}`)}`),
 		'',
 		'Packages:',
-		...packages.map((entry) => `- ${entry.data.packageName}: ${base}/packages/${entry.id}`),
+		...packages.map((entry) => `- ${entry.data.packageName}: ${link(`/packages/${entry.id}`)}`),
 		'',
 		'Seams:',
-		...seams.map((entry) => `- ${entry.data.title}: ${base}/seams/${entry.id}`),
+		...seams.map((entry) => `- ${entry.data.title}: ${link(`/seams/${entry.id}`)}`),
 		'',
-		`Timeline: ${base}/timeline`,
+		`Timeline: ${link('/timeline')}`,
 	];
 
 	return new Response(lines.join('\n'), {

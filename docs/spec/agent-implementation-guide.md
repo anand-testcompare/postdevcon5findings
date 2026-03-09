@@ -8,15 +8,17 @@ The human does not want to be involved in implementation details. Own the result
 
 ## Primary inputs
 
+All paths below are repo-relative files that are already committed under `docs/` in this repository.
+
 Read these first, in this order:
 
-1. `research-publishing/cloudflare-astro-template-recommendation.md`
-2. `research-publishing/content-format-blueprint.md`
-3. `research-publishing/content-seed-plan.md`
-4. `oac-compiler-research/high-level-summary.md`
-5. `oac-compiler-research/oac-stack-diagram.md`
-6. `oac-compiler-research/oac-stack-deep-dive.md`
-7. `oac-compiler-research/private-seams-and-counterparts.md`
+1. `docs/spec/cloudflare-astro-template-recommendation.md`
+2. `docs/spec/content-format-blueprint.md`
+3. `docs/spec/content-seed-plan.md`
+4. `docs/research/oac/high-level-summary.md`
+5. `docs/research/oac/oac-stack-diagram.md`
+6. `docs/research/oac/oac-stack-deep-dive.md`
+7. `docs/research/oac/private-seams-and-counterparts.md`
 
 ## Product goal
 
@@ -114,17 +116,27 @@ It is acceptable to stage the Python cluster as a clearly marked secondary topic
 9. add search and metadata polish
 10. test thoroughly and fix all issues
 
+## Approval gates
+
+Do not ask for routine implementation decisions, but stop for explicit human sign-off if any change would:
+
+- change data retention, analytics, or tracking behavior
+- introduce external integrations or third-party hosted services beyond the approved static-site stack
+- change the deployment target away from Astro on Cloudflare Pages or Workers
+- materially expand scope beyond the research-atlas information architecture
+- require publishing private research or credentials that are not already intended for the repo
+
 ## Testing requirements
 
 You must test thoroughly before opening a PR.
 
 At minimum run:
 
-- install dependencies
-- typecheck
+- `npm install`
+- `npx astro check`
+- `npm run build`
+- `npm run preview` or `npm run dev` for a local smoke test
 - lint if configured
-- build
-- local preview smoke test
 
 Also perform browser validation using an agent-browser workflow or equivalent browser automation.
 

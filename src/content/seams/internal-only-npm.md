@@ -4,7 +4,10 @@ summary: Some packages are published on npm but explicitly label themselves as i
 seamType: published but explicitly internal
 status: mixed
 confidence: high
-publicSurface: '@osdk/internal.foundry.*'
+publicSurface:
+  - '@osdk/internal.foundry'
+  - '@osdk/internal.foundry.core'
+  - '@osdk/internal.foundry.ontologies'
 likelyInternalCounterpart: Broader generated Foundry client layers and unsupported internal SDK substrates.
 evidenceRefs:
   - package descriptions literally say This is an internal only package

@@ -20,7 +20,9 @@ const { Content } = await render(entry);
 			<span>confidence {entry.data.confidence}</span>
 		</div>
 		<div class="chip-row">
-			<span class="chip">public surface: {entry.data.publicSurface}</span>
+			{entry.data.publicSurface.map((surface: string) => (
+				<span class="chip">public surface: {surface}</span>
+			))}
 			<span class="chip">likely internal counterpart: {entry.data.likelyInternalCounterpart}</span>
 		</div>
 		<div class="prose">
@@ -28,15 +30,17 @@ const { Content } = await render(entry);
 		</div>
 	</section>
 
-	<section class="section">
-		<div class="section-header">
-			<div>
-				<p class="eyebrow">Evidence</p>
-				<h2>Why this seam matters</h2>
+	{entry.data.evidenceRefs.length > 0 && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Evidence</p>
+					<h2>Why this seam matters</h2>
+				</div>
 			</div>
-		</div>
-		<ul class="plain-list">
-			{entry.data.evidenceRefs.map((item: string) => <li class="list-card">{item}</li>)}
-		</ul>
-	</section>
+			<ul class="plain-list">
+				{entry.data.evidenceRefs.map((item: string) => <li class="list-card">{item}</li>)}
+			</ul>
+		</section>
+	)}
 </SiteShell>

@@ -5,7 +5,9 @@ import StatusPill from '../../components/StatusPill.astro';
 import { importanceOrder } from '../../data/research';
 
 const topics = (await getCollection('topics')).sort(
-	(a, b) => importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
+	(a, b) =>
+		importanceOrder[a.data.importance] - importanceOrder[b.data.importance]
+		|| a.data.title.localeCompare(b.data.title),
 );
 ---
 

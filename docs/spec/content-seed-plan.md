@@ -6,18 +6,20 @@ This is the content the new site should launch with on day one, using the resear
 
 ## Source files to ingest
 
+All source paths below are repo-relative files that are already present in `docs/` in this repository.
+
 ### Core research
 
-- `oac-compiler-research/high-level-summary.md`
-- `oac-compiler-research/oac-stack-diagram.md`
-- `oac-compiler-research/oac-stack-deep-dive.md`
-- `oac-compiler-research/private-seams-and-counterparts.md`
-- `palantir-org-research/repo-signals.md`
+- `docs/research/oac/high-level-summary.md`
+- `docs/research/oac/oac-stack-diagram.md`
+- `docs/research/oac/oac-stack-deep-dive.md`
+- `docs/research/oac/private-seams-and-counterparts.md`
+- `docs/research/org/repo-signals.md`
 
 ### Publishing/meta docs
 
-- `research-publishing/content-format-blueprint.md`
-- `research-publishing/cloudflare-astro-template-recommendation.md`
+- `docs/spec/content-format-blueprint.md`
+- `docs/spec/cloudflare-astro-template-recommendation.md`
 
 ## Launch information architecture
 
@@ -34,8 +36,8 @@ Needs:
 
 Source inputs:
 
-- `oac-compiler-research/high-level-summary.md`
-- `oac-compiler-research/private-seams-and-counterparts.md`
+- `docs/research/oac/high-level-summary.md`
+- `docs/research/oac/private-seams-and-counterparts.md`
 
 ### Topic hubs
 

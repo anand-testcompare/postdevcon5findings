@@ -7,7 +7,7 @@ Use the official Cloudflare C3 Astro Pages starter, then build the atlas on top 
 Recommended scaffold command:
 
 ```bash
-npm create cloudflare@latest palantir-research-atlas -- --framework=astro --platform=pages
+npm create cloudflare@latest -- palantir-research-atlas --framework=astro --platform=pages
 ```
 
 When prompted inside Astro, choose the least opinionated project type available (`Minimal` if offered).
@@ -35,6 +35,12 @@ The agent should add these pieces right away:
 - `pagefind`
 - one client-island framework for interactive views, preferably `react`
 - optional `@astrojs/tailwind` if the starter does not already include a styling approach the agent likes
+
+After scaffold, the expected repo boot sequence is:
+
+```bash
+npm run build
+```
 
 ## Platform choice note
 

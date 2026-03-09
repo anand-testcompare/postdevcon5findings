@@ -14,7 +14,9 @@ const { Content } = await render(entry);
 const packages = await getCollection('packages');
 const seams = await getCollection('seams');
 
-const relatedPackages = packages.filter((item) => entry.data.relatedPackages.includes(item.id));
+const relatedPackages = packages.filter(
+	(item) => item.data.topicIds.includes(entry.id) || entry.data.relatedPackages.includes(item.id),
+);
 const relatedSeams = seams.filter((item) => entry.data.relatedSeams.includes(item.id));
 ---
 

@@ -4,7 +4,8 @@ summary: Some packages are intentionally public only as installers or wrappers w
 seamType: public wrapper around private core
 status: mixed
 confidence: high
-publicSurface: palantir-mcp
+publicSurface:
+  - 'palantir-mcp'
 likelyInternalCounterpart: Private Foundry-authenticated MCP core package distributed inside secure environments.
 evidenceRefs:
   - palantir-mcp npm metadata says it downloads and installs @palantir/mcp

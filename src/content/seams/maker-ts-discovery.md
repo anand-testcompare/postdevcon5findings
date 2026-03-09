@@ -4,7 +4,8 @@ summary: Public Maker exposes a function-discovery path that still depends on a 
 seamType: hard private runtime dependency
 status: mixed
 confidence: high
-publicSurface: '@osdk/maker'
+publicSurface:
+  - '@osdk/maker'
 likelyInternalCounterpart: Internal TypeScript OSDK function discoverer or indexer used by Foundry and Developer Console flows.
 evidenceRefs:
   - maker/build/esm/api/defineFunction.js dynamically imports @foundry/functions-typescript-osdk-discovery

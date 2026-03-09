@@ -1,5 +1,7 @@
 # Palantir Org Research
 
+Snapshot note: repo counts, rankings, and push recency below are a point-in-time snapshot collected on 2026-03-09 from public GitHub metadata.
+
 Public repos cataloged: **266**
 
 ## Most recently pushed

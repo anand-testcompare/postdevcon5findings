@@ -366,7 +366,6 @@ hr {
 
 .button-link:hover {
 	transform: translateY(-1px);
-	color: inherit;
 }
 
 .button-primary {
