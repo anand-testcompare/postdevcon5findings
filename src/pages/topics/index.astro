@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import SiteShell from '../../layouts/SiteShell.astro';
+import StatusPill from '../../components/StatusPill.astro';
+import { importanceOrder } from '../../data/research';
+
+const topics = (await getCollection('topics')).sort(
+	(a, b) => importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
+);
+---
+
+<SiteShell
+	title="Topic Hubs"
+	eyebrow="Map"
+	intro="Start with the big themes, then drill into the package and seam dossiers that support them."
+>
+	<section class="section">
+		<div class="card-grid">
+			{topics.map((topic) => (
+				<article class="card span-6">
+					<StatusPill status={topic.data.status} />
+					<h2>{topic.data.title}</h2>
+					<p>{topic.data.summary}</p>
+					<div class="meta-row">
+						<span>{topic.data.relatedPackages.length} related packages</span>
+						<span>{topic.data.relatedSeams.length} related seams</span>
+					</div>
+					<p><a class="link-arrow" href={`/topics/${topic.id}`}>Open topic -></a></p>
+				</article>
+			))}
+		</div>
+	</section>
+</SiteShell>

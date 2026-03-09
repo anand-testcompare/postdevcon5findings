@@ -1,0 +1,21 @@
+---
+import SiteShell from '../layouts/SiteShell.astro';
+import { timelineEvents } from '../data/research';
+---
+
+<SiteShell
+	title="Timeline"
+	eyebrow="By time"
+	intro="The public story opens in stages: deploy tooling first, app scaffolding second, ontology authoring third, then compiler, discovery, and testing layers later."
+>
+	<section class="section">
+		<ul class="timeline-list">
+			{timelineEvents.map((event) => (
+				<li>
+					<strong>{event.date} · {event.label}</strong>
+					<div>{event.summary}</div>
+				</li>
+			))}
+		</ul>
+	</section>
+</SiteShell>

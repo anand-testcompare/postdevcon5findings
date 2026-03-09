@@ -2,18 +2,47 @@ import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 
-const blog = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
-	// Type-check frontmatter using a schema
+const topics = defineCollection({
+	loader: glob({ base: "./src/content/topics", pattern: "**/*.md" }),
 	schema: z.object({
 		title: z.string(),
-		description: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
+		summary: z.string(),
+		status: z.enum(["public", "mixed", "private", "experimental", "preview"]),
+		importance: z.enum(["high", "medium", "low"]),
+		relatedPackages: z.array(z.string()).default([]),
+		relatedSeams: z.array(z.string()).default([]),
 	}),
 });
 
-export const collections = { blog };
+const packages = defineCollection({
+	loader: glob({ base: "./src/content/packages", pattern: "**/*.md" }),
+	schema: z.object({
+		title: z.string(),
+		summary: z.string(),
+		packageName: z.string(),
+		kind: z.string(),
+		status: z.enum(["public", "mixed", "private", "experimental", "preview"]),
+		importance: z.enum(["high", "medium", "low"]),
+		firstSeen: z.string(),
+		repo: z.string().optional(),
+		keyTakeaways: z.array(z.string()).default([]),
+		topicIds: z.array(z.string()).default([]),
+		seamIds: z.array(z.string()).default([]),
+	}),
+});
+
+const seams = defineCollection({
+	loader: glob({ base: "./src/content/seams", pattern: "**/*.md" }),
+	schema: z.object({
+		title: z.string(),
+		summary: z.string(),
+		seamType: z.string(),
+		status: z.enum(["public", "mixed", "private", "experimental", "preview"]),
+		confidence: z.enum(["high", "medium", "low"]),
+		publicSurface: z.string(),
+		likelyInternalCounterpart: z.string(),
+		evidenceRefs: z.array(z.string()).default([]),
+	}),
+});
+
+export const collections = { topics, packages, seams };

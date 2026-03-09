@@ -1,0 +1,9 @@
+---
+interface Props {
+	status: "public" | "mixed" | "private" | "experimental" | "preview";
+}
+
+const { status } = Astro.props;
+---
+
+<span class={`status-pill status-${status}`}>{status}</span>

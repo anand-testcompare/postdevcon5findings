@@ -1,0 +1,79 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteShell from '../../layouts/SiteShell.astro';
+import StatusPill from '../../components/StatusPill.astro';
+
+export async function getStaticPaths() {
+	const packages = await getCollection('packages');
+	return packages.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const topics = await getCollection('topics');
+const seams = await getCollection('seams');
+
+const relatedTopics = topics.filter((item) => entry.data.topicIds.includes(item.id));
+const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id));
+---
+
+<SiteShell title={entry.data.title} eyebrow="Package dossier" intro={entry.data.summary} description={entry.data.summary}>
+	<section class="section">
+		<div class="meta-row">
+			<StatusPill status={entry.data.status} />
+			<span>{entry.data.packageName}</span>
+			<span>{entry.data.kind}</span>
+			<span>first seen {entry.data.firstSeen}</span>
+		</div>
+		<div class="chip-row">
+			{entry.data.keyTakeaways.map((item: string) => <span class="chip">{item}</span>)}
+		</div>
+		<div class="prose">
+			<Content />
+		</div>
+		{entry.data.repo && <p><a class="link-arrow" href={entry.data.repo} target="_blank" rel="noreferrer">Source repo -></a></p>}
+	</section>
+
+	{relatedTopics.length > 0 && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Context</p>
+					<h2>Topics this package helps explain</h2>
+				</div>
+			</div>
+			<div class="card-grid">
+				{relatedTopics.map((item) => (
+					<article class="card span-6">
+						<StatusPill status={item.data.status} />
+						<h3>{item.data.title}</h3>
+						<p>{item.data.summary}</p>
+						<p><a class="link-arrow" href={`/topics/${item.id}`}>Open topic -></a></p>
+					</article>
+				))}
+			</div>
+		</section>
+	)}
+
+	{relatedSeams.length > 0 && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Boundary notes</p>
+					<h2>Seams attached to this package</h2>
+				</div>
+			</div>
+			<div class="card-grid">
+				{relatedSeams.map((item) => (
+					<article class="card span-6">
+						<StatusPill status={item.data.status} />
+						<h3>{item.data.title}</h3>
+						<p>{item.data.summary}</p>
+						<p><a class="link-arrow" href={`/seams/${item.id}`}>Inspect seam -></a></p>
+					</article>
+				))}
+			</div>
+		</section>
+	)}
+</SiteShell>

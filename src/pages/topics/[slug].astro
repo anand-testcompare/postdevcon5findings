@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteShell from '../../layouts/SiteShell.astro';
+import StatusPill from '../../components/StatusPill.astro';
+
+export async function getStaticPaths() {
+	const topics = await getCollection('topics');
+	return topics.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const packages = await getCollection('packages');
+const seams = await getCollection('seams');
+
+const relatedPackages = packages.filter((item) => entry.data.relatedPackages.includes(item.id));
+const relatedSeams = seams.filter((item) => entry.data.relatedSeams.includes(item.id));
+---
+
+<SiteShell
+	title={entry.data.title}
+	eyebrow="Topic"
+	intro={entry.data.summary}
+	description={entry.data.summary}
+>
+	<section class="section">
+		<div class="meta-row">
+			<StatusPill status={entry.data.status} />
+			<span>importance {entry.data.importance}</span>
+		</div>
+		<div class="prose">
+			<Content />
+		</div>
+	</section>
+
+	{relatedPackages.length > 0 && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Related packages</p>
+					<h2>Where this topic shows up</h2>
+				</div>
+			</div>
+			<div class="card-grid">
+				{relatedPackages.map((item) => (
+					<article class="card span-4">
+						<StatusPill status={item.data.status} />
+						<h3>{item.data.title}</h3>
+						<p>{item.data.summary}</p>
+						<p><a class="link-arrow" href={`/packages/${item.id}`}>Open dossier -></a></p>
+					</article>
+				))}
+			</div>
+		</section>
+	)}
+
+	{relatedSeams.length > 0 && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Related seams</p>
+					<h2>Where the boundary still shows</h2>
+				</div>
+			</div>
+			<div class="card-grid">
+				{relatedSeams.map((item) => (
+					<article class="card span-6">
+						<StatusPill status={item.data.status} />
+						<h3>{item.data.title}</h3>
+						<p>{item.data.summary}</p>
+						<p><a class="link-arrow" href={`/seams/${item.id}`}>Inspect seam -></a></p>
+					</article>
+				))}
+			</div>
+		</section>
+	)}
+</SiteShell>
