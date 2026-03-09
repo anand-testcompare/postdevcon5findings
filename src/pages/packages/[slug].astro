@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import SiteShell from '../../layouts/SiteShell.astro';
 import StatusPill from '../../components/StatusPill.astro';
+import { packageMeta } from '../../data/packageMeta';
 
 export async function getStaticPaths() {
 	const packages = await getCollection('packages');
@@ -10,58 +11,75 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-
-const topics = await getCollection('topics');
 const seams = await getCollection('seams');
+const meta = packageMeta[entry.id] ?? {};
 
-const relatedTopics = topics.filter((item) => entry.data.topicIds.includes(item.id));
 const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id));
 ---
 
-<SiteShell title={entry.data.title} eyebrow="Package dossier" intro={entry.data.summary} description={entry.data.summary}>
+<SiteShell title={entry.data.title} eyebrow="Package" intro={entry.data.summary} description={entry.data.summary}>
 	<section class="section">
-		<div class="meta-row">
-			<StatusPill status={entry.data.status} />
-			<span>{entry.data.packageName}</span>
-			<span>{entry.data.kind}</span>
-			<span>first seen {entry.data.firstSeen}</span>
+		<div class="package-meta-grid">
+			<div class="metric compact-metric">
+				<span class="table-subtle">package</span>
+				<strong class="metric-code">{entry.data.packageName}</strong>
+			</div>
+			<div class="metric compact-metric">
+				<span class="table-subtle">first seen</span>
+				<strong class="metric-code">{entry.data.firstSeen}</strong>
+			</div>
+			<div class="metric compact-metric">
+				<span class="table-subtle">inspected version</span>
+				<strong class="metric-code">{meta.inspectedVersion ?? '-'}</strong>
+			</div>
+			<div class="metric compact-metric">
+				<span class="table-subtle">status</span>
+				<div><StatusPill status={entry.data.status} /></div>
+			</div>
 		</div>
-		<div class="chip-row">
-			{entry.data.keyTakeaways.map((item: string) => <span class="chip">{item}</span>)}
+		<div class="table-links top-links">
+			{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+			{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
+			{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+		</div>
+		<ul class="plain-list compact-list">
+			{entry.data.keyTakeaways.map((item: string) => <li class="list-card">{item}</li>)}
+			{meta.notes?.map((item) => <li class="list-card">{item}</li>)}
+		</ul>
+	</section>
+
+	{meta.codeSnippet && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Relevant code</p>
+					<h2>Most revealing snippet</h2>
+				</div>
+				{meta.codeUrl && <a class="link-arrow" href={meta.codeUrl} target="_blank" rel="noreferrer">Open source file -></a>}
+			</div>
+			{meta.codePath && <p class="table-subtle">{meta.codePath}</p>}
+			<pre><code>{meta.codeSnippet}</code></pre>
+		</section>
+	)}
+
+	<section class="section">
+		<div class="section-header">
+			<div>
+				<p class="eyebrow">Notes</p>
+				<h2>What changed</h2>
+			</div>
 		</div>
 		<div class="prose">
 			<Content />
 		</div>
-		{entry.data.repo && <p><a class="link-arrow" href={entry.data.repo} target="_blank" rel="noreferrer">Source repo -></a></p>}
 	</section>
-
-	{relatedTopics.length > 0 && (
-		<section class="section">
-			<div class="section-header">
-				<div>
-					<p class="eyebrow">Context</p>
-					<h2>Topics this package helps explain</h2>
-				</div>
-			</div>
-			<div class="card-grid">
-				{relatedTopics.map((item) => (
-					<article class="card span-6">
-						<StatusPill status={item.data.status} />
-						<h3>{item.data.title}</h3>
-						<p>{item.data.summary}</p>
-						<p><a class="link-arrow" href={`/topics/${item.id}`}>Open topic -></a></p>
-					</article>
-				))}
-			</div>
-		</section>
-	)}
 
 	{relatedSeams.length > 0 && (
 		<section class="section">
 			<div class="section-header">
 				<div>
-					<p class="eyebrow">Boundary notes</p>
-					<h2>Seams attached to this package</h2>
+					<p class="eyebrow">Seams</p>
+					<h2>Boundary notes</h2>
 				</div>
 			</div>
 			<div class="card-grid">

@@ -320,6 +320,113 @@ hr {
 	text-decoration: none;
 }
 
+.dense-summary h1 {
+	max-width: 18ch;
+	font-size: clamp(2.2rem, 5vw, 4rem);
+	margin-bottom: 0.75rem;
+}
+
+.table-wrap {
+	overflow-x: auto;
+}
+
+.dense-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.94rem;
+	min-width: 860px;
+}
+
+.dense-table th,
+.dense-table td {
+	padding: 0.8rem 0.75rem;
+	border-bottom: 1px solid var(--border-color);
+	vertical-align: top;
+	text-align: left;
+}
+
+.dense-table th {
+	font-size: 0.76rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--ink-muted);
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.dense-table tbody tr:hover {
+	background: rgba(255, 255, 255, 0.45);
+}
+
+.mono,
+.metric-code {
+	font-family: "SFMono-Regular", "Menlo", "Monaco", "Liberation Mono", monospace;
+	font-size: 0.95rem;
+}
+
+.metric-code {
+	font-size: 1rem;
+	line-height: 1.2;
+}
+
+.table-subtle {
+	margin-top: 0.2rem;
+	font-size: 0.82rem;
+	color: var(--ink-muted);
+	line-height: 1.4;
+}
+
+.table-links,
+.top-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.7rem;
+	align-items: center;
+	font-size: 0.92rem;
+}
+
+.table-links a,
+.top-links a {
+	text-decoration: none;
+	font-weight: 700;
+}
+
+.top-links {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+.compact-grid {
+	gap: 0.8rem;
+}
+
+.compact-card {
+	padding: 0.95rem 1rem;
+}
+
+.compact-list {
+	margin-top: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.compact-list .list-card {
+	padding: 0.75rem 0.85rem;
+	font-size: 0.92rem;
+	box-shadow: none;
+}
+
+.package-meta-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 0.8rem;
+	margin-bottom: 0.6rem;
+}
+
+.compact-metric {
+	padding: 0.8rem 0.9rem;
+	box-shadow: none;
+}
+
 .hero-grid {
 	display: grid;
 	grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.9fr);
@@ -411,6 +518,9 @@ hr {
 		flex-direction: column;
 		align-items: flex-start;
 	}
+	.package-meta-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 @media (max-width: 720px) {
@@ -430,6 +540,12 @@ hr {
 	.hero-panel {
 		padding: 1.15rem;
 		border-radius: 24px;
+	}
+	.package-meta-grid {
+		grid-template-columns: 1fr;
+	}
+	.dense-table {
+		min-width: 720px;
 	}
 }
 

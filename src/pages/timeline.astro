@@ -1,21 +1,42 @@
 ---
+import { getCollection } from 'astro:content';
 import SiteShell from '../layouts/SiteShell.astro';
-import { timelineEvents } from '../data/research';
+import StatusPill from '../components/StatusPill.astro';
+import { compareFirstSeenDesc, packageMeta } from '../data/packageMeta';
+import { importanceOrder } from '../data/research';
+
+const packages = (await getCollection('packages')).sort(
+	(a, b) =>
+		compareFirstSeenDesc(a.data.firstSeen, b.data.firstSeen)
+		|| importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
+);
 ---
 
 <SiteShell
 	title="Timeline"
 	eyebrow="By time"
-	intro="The public story opens in stages: deploy tooling first, app scaffolding second, ontology authoring third, then compiler, discovery, and testing layers later."
+	intro="Newest packages up top. Use this as the fast view for what appeared when, which version was inspected, and which changes matter enough to click through."
 >
 	<section class="section">
 		<ul class="timeline-list">
-			{timelineEvents.map((event) => (
-				<li>
-					<strong>{event.date} · {event.label}</strong>
-					<div>{event.summary}</div>
-				</li>
-			))}
+			{packages.map((entry) => {
+				const meta = packageMeta[entry.id] ?? {};
+				return (
+					<li>
+						<strong>{entry.data.firstSeen} · <a href={`/packages/${entry.id}`}>{entry.data.packageName}</a></strong>
+						<div>{entry.data.summary}</div>
+						<div class="meta-row">
+							<StatusPill status={entry.data.status} />
+							{meta.inspectedVersion && <span>inspected {meta.inspectedVersion}</span>}
+							{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+							{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+						</div>
+						<ul class="plain-list compact-list">
+							{entry.data.keyTakeaways.slice(0, 2).map((item: string) => <li class="list-card">{item}</li>)}
+						</ul>
+					</li>
+				);
+			})}
 		</ul>
 	</section>
 </SiteShell>
