@@ -1,3 +1,5 @@
+export type PackageCodeLanguage = 'js' | 'ts' | 'tsx' | 'json' | 'python' | 'bash' | 'text';
+
 export type PackageMeta = {
 	inspectedVersion?: string;
 	registryLabel?: string;
@@ -5,7 +7,7 @@ export type PackageMeta = {
 	repoUrl?: string;
 	codeUrl?: string;
 	codePath?: string;
-	codeLanguage?: string;
+	codeLanguage?: PackageCodeLanguage;
 	codeSnippet?: string;
 	notes?: string[];
 };
