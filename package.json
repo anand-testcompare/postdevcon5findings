@@ -1,8 +1,8 @@
 {
-	"name": "astro-blog-starter-template",
-	"description": "Build a personal website, blog, or portfolio with Astro.",
+	"name": "postdevcon5findings",
+	"description": "Research atlas for Palantir's public OSDK, OAC compiler, and private-boundary findings.",
 	"cloudflare": {
-		"label": "Astro Framework Starter",
+		"label": "Post-DevCon 5 Findings",
 		"products": [
 			"Workers"
 		],
@@ -14,12 +14,12 @@
 	"dependencies": {
 		"@astrojs/cloudflare": "12.6.12",
 		"@astrojs/mdx": "4.3.13",
-		"@astrojs/rss": "4.0.14",
 		"@astrojs/sitemap": "3.6.1",
 		"astro": "5.16.9",
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
+		"@astrojs/check": "^0.9.6",
 		"wrangler": "4.56.0"
 	},
 	"engines": {

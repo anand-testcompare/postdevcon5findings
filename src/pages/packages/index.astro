@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import SiteShell from '../../layouts/SiteShell.astro';
+import StatusPill from '../../components/StatusPill.astro';
+import { importanceOrder } from '../../data/research';
+
+const packages = (await getCollection('packages')).sort(
+	(a, b) => importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
+);
+---
+
+<SiteShell
+	title="Package Dossiers"
+	eyebrow="By package"
+	intro="Each dossier explains what a package is, what changed functionally, where it sits in the stack, and whether it exposes a meaningful public-private seam."
+>
+	<section class="section">
+		<div class="card-grid">
+			{packages.map((entry) => (
+				<article class="card span-4">
+					<StatusPill status={entry.data.status} />
+					<h3>{entry.data.title}</h3>
+					<p>{entry.data.summary}</p>
+					<div class="chip-row">
+						<span class="chip">{entry.data.packageName}</span>
+						<span class="chip">{entry.data.kind}</span>
+					</div>
+					<div class="meta-row">
+						<span>first seen {entry.data.firstSeen}</span>
+						<span>importance {entry.data.importance}</span>
+					</div>
+					<p><a class="link-arrow" href={`/packages/${entry.id}`}>Read dossier -></a></p>
+				</article>
+			))}
+		</div>
+	</section>
+</SiteShell>

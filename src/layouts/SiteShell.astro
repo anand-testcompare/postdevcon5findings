@@ -1,0 +1,45 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+interface Props {
+	title?: string;
+	description?: string;
+	eyebrow?: string;
+	intro?: string;
+	showHero?: boolean;
+}
+
+const {
+	title = SITE_TITLE,
+	description = SITE_DESCRIPTION,
+	eyebrow,
+	intro,
+	showHero = true,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="page-shell">
+			{
+				showHero && (eyebrow || title || intro) && (
+					<section class="page-hero">
+						{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+						<h1>{title}</h1>
+						{intro && <p class="lede">{intro}</p>}
+					</section>
+				)
+			}
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

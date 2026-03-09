@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import SiteShell from '../../layouts/SiteShell.astro';
+import StatusPill from '../../components/StatusPill.astro';
+
+const seams = await getCollection('seams');
+---
+
+<SiteShell
+	title="Public-Private Seam Map"
+	eyebrow="By seam"
+	intro="These are the most important places where the public story still exposes internal dependencies, private runtimes, or internal-shaped artifacts."
+>
+	<section class="section">
+		<div class="card-grid">
+			{seams.map((entry) => (
+				<article class="card span-6">
+					<StatusPill status={entry.data.status} />
+					<h2>{entry.data.title}</h2>
+					<p>{entry.data.summary}</p>
+					<div class="meta-row">
+						<span>{entry.data.seamType}</span>
+						<span>confidence {entry.data.confidence}</span>
+					</div>
+					<p><a class="link-arrow" href={`/seams/${entry.id}`}>Inspect seam -></a></p>
+				</article>
+			))}
+		</div>
+	</section>
+</SiteShell>

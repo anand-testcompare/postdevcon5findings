@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteShell from '../../layouts/SiteShell.astro';
+import StatusPill from '../../components/StatusPill.astro';
+
+export async function getStaticPaths() {
+	const seams = await getCollection('seams');
+	return seams.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<SiteShell title={entry.data.title} eyebrow="Seam dossier" intro={entry.data.summary} description={entry.data.summary}>
+	<section class="section">
+		<div class="meta-row">
+			<StatusPill status={entry.data.status} />
+			<span>{entry.data.seamType}</span>
+			<span>confidence {entry.data.confidence}</span>
+		</div>
+		<div class="chip-row">
+			{entry.data.publicSurface.map((surface: string) => (
+				<span class="chip">public surface: {surface}</span>
+			))}
+			<span class="chip">likely internal counterpart: {entry.data.likelyInternalCounterpart}</span>
+		</div>
+		<div class="prose">
+			<Content />
+		</div>
+	</section>
+
+	{entry.data.evidenceRefs.length > 0 && (
+		<section class="section">
+			<div class="section-header">
+				<div>
+					<p class="eyebrow">Evidence</p>
+					<h2>Why this seam matters</h2>
+				</div>
+			</div>
+			<ul class="plain-list">
+				{entry.data.evidenceRefs.map((item: string) => <li class="list-card">{item}</li>)}
+			</ul>
+		</section>
+	)}
+</SiteShell>
