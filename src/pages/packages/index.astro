@@ -2,28 +2,25 @@
 import { getCollection } from 'astro:content';
 import SiteShell from '../../layouts/SiteShell.astro';
 import StatusPill from '../../components/StatusPill.astro';
-import { compareFirstSeenDesc, packageMeta } from '../../data/packageMeta';
+import { comparePackagePriority, packageMeta } from '../../data/packageMeta';
 import { importanceOrder } from '../../data/research';
 
-const packages = (await getCollection('packages')).sort(
-	(a, b) =>
-		compareFirstSeenDesc(a.data.firstSeen, b.data.firstSeen)
-		|| importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
-);
+const packages = (await getCollection('packages')).sort((a, b) => comparePackagePriority(a, b, importanceOrder));
 ---
 
 <SiteShell
 	title="Packages"
 	eyebrow="By package"
-	intro="Dense inventory view: versions, timing, purpose, and direct links out to package pages, repos, and inspected code."
+	intro="Priority-first inventory view: high-signal packages rise to the top, with versions, timing, purpose, and direct links out to package pages, repos, and inspected code."
 >
 	<section class="section">
 		<div class="table-wrap">
 			<table class="dense-table">
 				<thead>
 					<tr>
-						<th>First seen</th>
+						<th>Priority</th>
 						<th>Package</th>
+						<th>First seen</th>
 						<th>Inspected</th>
 						<th>Latest stable</th>
 						<th>Status</th>
@@ -36,11 +33,12 @@ const packages = (await getCollection('packages')).sort(
 						const meta = packageMeta[entry.id] ?? {};
 						return (
 							<tr>
-								<td class="mono">{entry.data.firstSeen}</td>
+								<td class="mono">{entry.data.importance}</td>
 								<td>
 									<a href={`/packages/${entry.id}`}>{entry.data.packageName}</a>
 									<div class="table-subtle">{entry.data.kind}</div>
 								</td>
+								<td class="mono">{entry.data.firstSeen}</td>
 								<td class="mono">{meta.inspectedVersion ?? '-'}</td>
 								<td>
 									<div class="mono">{meta.latestReleaseVersion ?? '-'}</div>

@@ -208,3 +208,17 @@ const website = await third_party_applications_exports.deployWebsite(clientCtx, 
 export function compareFirstSeenDesc(a: string, b: string) {
 	return b.localeCompare(a);
 }
+
+export function comparePackagePriority(
+	a: { data: { importance: string; firstSeen: string; packageName: string }; id: string },
+	b: { data: { importance: string; firstSeen: string; packageName: string }; id: string },
+	importanceOrder: Record<string, number>,
+) {
+	const aFeatured = packageMeta[a.id]?.latestReleaseFeatured ? 0 : 1;
+	const bFeatured = packageMeta[b.id]?.latestReleaseFeatured ? 0 : 1;
+
+	return importanceOrder[a.data.importance] - importanceOrder[b.data.importance]
+		|| aFeatured - bFeatured
+		|| compareFirstSeenDesc(a.data.firstSeen, b.data.firstSeen)
+		|| a.data.packageName.localeCompare(b.data.packageName);
+}
