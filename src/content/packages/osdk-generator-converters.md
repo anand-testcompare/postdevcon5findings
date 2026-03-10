@@ -1,6 +1,6 @@
 ---
 title: Generator Converters
-summary: The normalization layer where ontology and query semantics are translated into richer metadata for SDK generation.
+summary: The normalization layer where ontology and query semantics become SDK metadata; this is where semantic support tends to land before it becomes visible in higher layers.
 packageName: '@osdk/generator-converters'
 kind: metadata conversion layer
 status: public
@@ -8,10 +8,10 @@ importance: medium
 firstSeen: 2025-01
 repo: https://github.com/palantir/osdk-ts
 keyTakeaways:
-  - Handles conversion from ontology and query structures into OSDK-friendly metadata.
-  - Recent changes include branch-aware execution, transaction IDs, and media query IO.
+  - Wires raw ontology/query structures into the metadata shapes the generated SDK actually uses.
+  - Real capability changes landed here for branch-aware queries, transaction IDs, media query IO, formatting, and interface-property handling.
   - Reveals where new semantics often land before they become obvious in higher-level tooling.
-  - The fresh 2.7.5 stable publish looks like release-train alignment, not a new converter capability drop.
+  - The 2.7.5 stable patch itself is low-signal; the important changes are earlier minor additions in the 2.6/2.7/2.8 line.
 topicIds:
   - oac-compiler-stack
 seamIds: []
@@ -23,6 +23,6 @@ If Maker is the source language, generator converters are the normalization pass
 
 Watching this layer helps explain functional change, because it is where execution semantics become metadata that generators and discovery flows can consume.
 
-That is exactly why the 2.7.5 stable publish is useful to call out: the package moved again in the last 24 hours, but the visible diff is mostly compatibility churn around `@osdk/api`, not a new semantic feature.
+The meaningful additions were not the most recent stable patch. They were changes like branch execution support, transaction IDs on queries, media query types, and interface-property metadata improvements. Those are exactly the kinds of semantics that later show up as “new SDK behavior.”
 
-In other words, the package remains strategically important even when an individual patch release is mostly a coordinated rollup.
+In other words, this package remains strategically important even when an individual patch release is mostly a coordinated rollup.

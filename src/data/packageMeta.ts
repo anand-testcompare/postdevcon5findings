@@ -78,6 +78,22 @@ const blockGeneratorResult = {
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/generator-converters/v/2.7.5",
 		latestReleaseSummary: "Fresh stable publish, but the diff is mostly version alignment with @osdk/api rather than new converter behavior.",
 		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/generator-converters",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/generator-converters/src/wireQueryTypeV2ToSdkQueryMetadata.ts",
+		sourcePath: "packages/generator-converters/src/wireQueryTypeV2ToSdkQueryMetadata.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/generator-converters@2.8.0-beta.15/build/esm/wireQueryTypeV2ToSdkQueryMetadata.js",
+		publishedCodePath: "build/esm/wireQueryTypeV2ToSdkQueryMetadata.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/generator-converters/src/wireQueryTypeV2ToSdkQueryMetadata.ts",
+		codePath: "packages/generator-converters/src/wireQueryTypeV2ToSdkQueryMetadata.ts",
+		codeLanguage: "ts",
+		codeSnippet: `export function wireQueryTypeV2ToSdkQueryMetadata(input: QueryTypeV2): QueryMetadata {
+	  return {
+	    apiName: input.apiName,
+	    version: input.version,
+	    parameters: Object.fromEntries(...),
+	    output: wireQueryDataTypeToQueryDataTypeDefinition(input.output),
+	    rid: input.rid,
+	  };
+	}`,
 		notes: ["Normalization layer where query execution semantics keep landing first."],
 	},
 	"osdk-generator-converters-preview": {
@@ -211,25 +227,42 @@ const { stdout } = await execa("pnpm", [
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/cli/v/0.32.0-beta.3",
 		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/cli",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/cli/src/commands/site/deploy/siteDeployCommand.mts",
+		sourcePath: "packages/cli/src/commands/site/deploy/siteDeployCommand.mts",
 		publishedCodeUrl: "https://unpkg.com/@osdk/cli@0.32.0-beta.3/build/esm/siteDeployCommand-PLEDSCX7.js",
 		publishedCodePath: "build/esm/siteDeployCommand-PLEDSCX7.js",
-		codeUrl: "https://unpkg.com/@osdk/cli@0.32.0-beta.3/build/esm/siteDeployCommand-PLEDSCX7.js",
-		codePath: "build/esm/siteDeployCommand-PLEDSCX7.js",
-		codeLanguage: "js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/cli/src/commands/site/deploy/siteDeployCommand.mts",
+		codePath: "packages/cli/src/commands/site/deploy/siteDeployCommand.mts",
+		codeLanguage: "ts",
 		codeSnippet: `if (snapshot) {
-  await uploadSnapshot(clientCtx, application, siteVersion, snapshotId ?? "", archive);
-  return;
-}
+	  await uploadSnapshot(clientCtx, application, siteVersion, snapshotId ?? "", archive);
+	  return;
+	}
 
-await upload(clientCtx, application, siteVersion, archive);
-const website = await third_party_applications_exports.deployWebsite(clientCtx, application, {
-  version: siteVersion
-});`,
+	await upload(clientCtx, application, siteVersion, archive);
+	const website = await thirdPartyApplications.deployWebsite(clientCtx, application, {
+	  version: siteVersion,
+	});`,
 	},
 	"palantir-mcp": {
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/palantir-mcp",
-		repoUrl: "https://github.com/palantir/palantir-mcp",
+		repoUrl: "https://github.com/palantir/palantir-mcp/tree/develop",
+		sourceUrl: "https://github.com/palantir/palantir-mcp/blob/develop/src/spawn.ts",
+		sourcePath: "src/spawn.ts",
+		publishedCodeUrl: "https://unpkg.com/palantir-mcp/dist/index.js",
+		publishedCodePath: "dist/index.js",
+		codeUrl: "https://github.com/palantir/palantir-mcp/blob/develop/src/spawn.ts",
+		codePath: "src/spawn.ts",
+		codeLanguage: "ts",
+		codeSnippet: `const child = spawn('npx', ['-y', '@palantir/mcp@latest', ...args], {
+	  stdio: 'inherit',
+	  env: {
+	    ...process.env,
+	    NPM_CONFIG_REGISTRY: npmRegistry.toString(),
+	    [authTokenEnvVar]: foundryToken,
+	  },
+	})`,
 		notes: ["Public wrapper installs a private MCP core from secure Foundry environments."],
 	},
 	"osdk-foundry-thirdpartyapplications": {
