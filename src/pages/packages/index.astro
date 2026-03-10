@@ -47,14 +47,13 @@ const packages = (await getCollection('packages')).sort((a, b) => comparePackage
 								<td><StatusPill status={entry.data.status} /></td>
 								<td>
 									<div>{entry.data.summary}</div>
-									{meta.latestReleaseFeatured && meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
 								</td>
 								<td>
 									<div class="table-links">
 										{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
 										{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
-										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
-										{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">source</a>}
+										{meta.sourceUrl && <a href={meta.sourceUrl} target="_blank" rel="noreferrer">file</a>}
 									</div>
 								</td>
 							</tr>

@@ -8,6 +8,10 @@ export type PackageMeta = {
 	latestReleaseSummary?: string;
 	latestReleaseFeatured?: boolean;
 	repoUrl?: string;
+	sourceUrl?: string;
+	sourcePath?: string;
+	publishedCodeUrl?: string;
+	publishedCodePath?: string;
 	codeUrl?: string;
 	codePath?: string;
 	codeLanguage?: string;
@@ -20,10 +24,14 @@ export const packageMeta: Record<string, PackageMeta> = {
 		inspectedVersion: "0.16.0-beta.9",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/maker/v/0.16.0-beta.9",
-		repoUrl: "https://github.com/palantir/osdk-ts",
-		codeUrl: "https://unpkg.com/@osdk/maker@0.16.0-beta.9/build/esm/api/defineFunction.js",
-		codePath: "build/esm/api/defineFunction.js",
-		codeLanguage: "js",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/maker",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/maker/src/api/defineFunction.ts",
+		sourcePath: "packages/maker/src/api/defineFunction.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/maker@0.16.0-beta.9/build/esm/api/defineFunction.js",
+		publishedCodePath: "build/esm/api/defineFunction.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/maker/src/api/defineFunction.ts",
+		codePath: "packages/maker/src/api/defineFunction.ts",
+		codeLanguage: "ts",
 		codeSnippet: `let cachedFunctionDiscoverer = null;
 async function loadFunctionDiscoverer() {
   try {
@@ -42,10 +50,14 @@ async function loadFunctionDiscoverer() {
 		inspectedVersion: "0.6.0-beta.4",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/maker-experimental/v/0.6.0-beta.4",
-		repoUrl: "https://github.com/palantir/osdk-ts",
-		codeUrl: "https://unpkg.com/@osdk/maker-experimental@0.6.0-beta.4/build/esm/cli/main.js",
-		codePath: "build/esm/cli/main.js",
-		codeLanguage: "js",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/maker-experimental",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/maker-experimental/src/cli/main.ts",
+		sourcePath: "packages/maker-experimental/src/cli/main.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/maker-experimental@0.6.0-beta.4/build/esm/cli/main.js",
+		publishedCodePath: "build/esm/cli/main.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/maker-experimental/src/cli/main.ts",
+		codePath: "packages/maker-experimental/src/cli/main.ts",
+		codeLanguage: "ts",
 		codeSnippet: `consola.log("Generating BlockGeneratorResult for ontology...");
 const ontologyJsonPath = path.join(blockDataDir, "ontology.json");
 await fs.promises.writeFile(ontologyJsonPath, ontologyJson);
@@ -65,36 +77,47 @@ const blockGeneratorResult = {
 		latestReleasePublishedAt: "2026-03-09T18:43:18.901Z",
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/generator-converters/v/2.7.5",
 		latestReleaseSummary: "Fresh stable publish, but the diff is mostly version alignment with @osdk/api rather than new converter behavior.",
-		repoUrl: "https://github.com/palantir/osdk-ts",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/generator-converters",
 		notes: ["Normalization layer where query execution semantics keep landing first."],
 	},
 	"osdk-generator-converters-preview": {
 		inspectedVersion: "0.1.0-beta.2",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/generator-converters.preview/v/0.1.0-beta.2",
-		repoUrl: "https://github.com/palantir/osdk-ts",
-		codeUrl: "https://unpkg.com/@osdk/generator-converters.preview@0.1.0-beta.2/build/esm/cli/generate-sdk.js",
-		codePath: "build/esm/cli/generate-sdk.js",
-		codeLanguage: "js",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/generator-converters.preview",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/generator-converters.preview/src/cli/generate-sdk.ts",
+		sourcePath: "packages/generator-converters.preview/src/cli/generate-sdk.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/generator-converters.preview@0.1.0-beta.2/build/esm/cli/generate-sdk.js",
+		publishedCodePath: "build/esm/cli/generate-sdk.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/generator-converters.preview/src/cli/generate-sdk.ts",
+		codePath: "packages/generator-converters.preview/src/cli/generate-sdk.ts",
+		codeLanguage: "ts",
 		codeSnippet: `const previewMetadata = PreviewOntologyIrConverter.getPreviewFullMetadataFromIr(irJson);
+
+if (argv.pythonBinary && argv.pythonFunctionsDir) {
+  generatePythonSdk(previewMetadata, argv.pythonBinary);
+}
 
 if (argv.functionsDir || argv.pythonFunctionsDir) {
   const queryTypes = await OntologyIrToFullMetadataConverter.getOsdkQueryTypes(...);
   previewMetadata.queryTypes = queryTypes;
 }
 
-await generateClientSdkVersionTwoPointZero(metadata, ...);
-await fs.writeFile(metadataPath, JSON.stringify(previewMetadata, null, 2), "utf-8");`,
+await generateClientSdkVersionTwoPointZero(metadata, ...);`,
 		notes: ["Most revealing bridge from ontology IR to discovery-aware SDK generation."],
 	},
 	"osdk-functions-testing-experimental": {
 		inspectedVersion: "0.2.0-beta.3",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/functions-testing.experimental/v/0.2.0-beta.3",
-		repoUrl: "https://github.com/palantir/osdk-ts",
-		codeUrl: "https://unpkg.com/@osdk/functions-testing.experimental@0.2.0-beta.3/build/esm/mock/createMockClient.js",
-		codePath: "build/esm/mock/createMockClient.js",
-		codeLanguage: "js",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/functions-testing.experimental",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/functions-testing.experimental/src/mock/createMockClient.ts",
+		sourcePath: "packages/functions-testing.experimental/src/mock/createMockClient.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/functions-testing.experimental@0.2.0-beta.3/build/esm/mock/createMockClient.js",
+		publishedCodePath: "build/esm/mock/createMockClient.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/functions-testing.experimental/src/mock/createMockClient.ts",
+		codePath: "packages/functions-testing.experimental/src/mock/createMockClient.ts",
+		codeLanguage: "ts",
 		codeSnippet: `export function createMockClient() {
   const stubs = [];
   const queryStubs = [];
@@ -110,16 +133,24 @@ await fs.writeFile(metadataPath, JSON.stringify(previewMetadata, null, 2), "utf-
 		inspectedVersion: "0.1.0",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/language-models/v/0.1.0",
-		repoUrl: "https://github.com/palantir/osdk-ts",
-		codeUrl: "https://unpkg.com/@osdk/language-models@0.1.0/build/esm/utils.js",
-		codePath: "build/esm/utils.js",
-		codeLanguage: "js",
-		codeSnippet: `export function getAnthropicBaseUrl(client) {
-  return \`${'${client.baseUrl}'}/api/v2/llm/proxy/anthropic\`;
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/language-models",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/language-models/src/utils.ts",
+		sourcePath: "packages/language-models/src/utils.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/language-models@0.1.0/build/esm/utils.js",
+		publishedCodePath: "build/esm/utils.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/language-models/src/utils.ts",
+		codePath: "packages/language-models/src/utils.ts",
+		codeLanguage: "ts",
+		codeSnippet: `export function createFetch(client: PlatformClient): typeof globalThis.fetch {
+	  return client.fetch;
 }
 
-export function getOpenAiBaseUrl(client) {
-  return \`${'${client.baseUrl}'}/api/v2/llm/proxy/openai/v1\`;
+	export async function getFoundryToken(client: PlatformClient): Promise<string> {
+	  return client.tokenProvider();
+	}
+
+	export function getOpenAiBaseUrl(client: PlatformClient): string {
+	  return \`${'${client.baseUrl}'}/api/v2/llm/proxy/openai/v1\`;
 }`,
 	},
 	"osdk-create-app": {
@@ -131,13 +162,21 @@ export function getOpenAiBaseUrl(client) {
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/create-app/v/2.7.5",
 		latestReleaseSummary: "Fresh stable release; the clearest user-facing change is the bundled starter templates moving to Vite ^7.3.1.",
 		latestReleaseFeatured: true,
-		repoUrl: "https://github.com/palantir/osdk-ts",
-		codeUrl: "https://unpkg.com/@osdk/create-app@2.8.0-beta.15/build/esm/index.js",
-		codePath: "build/esm/index.js",
-		codeLanguage: "js",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/create-app",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/create-app/src/prompts/promptSdkVersion.ts",
+		sourcePath: "packages/create-app/src/prompts/promptSdkVersion.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/create-app@2.8.0-beta.15/build/esm/prompts/promptSdkVersion.js",
+		publishedCodePath: "build/esm/prompts/promptSdkVersion.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/create-app/src/prompts/promptSdkVersion.ts",
+		codePath: "packages/create-app/src/prompts/promptSdkVersion.ts",
+		codeLanguage: "ts",
 		codeSnippet: `async function promptSdkVersion({ sdkVersion, template }) {
 	  if (sdkVersion == null) {
-	    return Object.keys(template.files).at(-1);
+	    return Object.keys(template.files).at(-1) as SdkVersion;
+	  }
+
+	  if (template.files[sdkVersion as SdkVersion] == null) {
+	    sdkVersion = await consola.prompt("Please choose which version of the OSDK you'd like to use", ...);
 	  }
 	}`,
 	},
@@ -150,14 +189,30 @@ export function getOpenAiBaseUrl(client) {
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/vite-plugin-oac/v/0.5.6",
 		latestReleaseSummary: "Fresh OAC-side release, but this patch looks like a dependency rollup across @osdk/api, client.unstable, and ontology IR converters.",
 		latestReleaseFeatured: true,
-		repoUrl: "https://github.com/palantir/osdk-ts",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/vite-plugin-oac",
+		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/vite-plugin-oac/src/generateOntologyAssets.ts",
+		sourcePath: "packages/vite-plugin-oac/src/generateOntologyAssets.ts",
+		publishedCodeUrl: "https://unpkg.com/@osdk/vite-plugin-oac@0.5.6/build/esm/generateOntologyAssets.js",
+		publishedCodePath: "build/esm/generateOntologyAssets.js",
+		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/vite-plugin-oac/src/generateOntologyAssets.ts",
+		codePath: "packages/vite-plugin-oac/src/generateOntologyAssets.ts",
+		codeLanguage: "ts",
+		codeSnippet: `await ontologyJsToIr(opts);
+await ontologyIrToFullMetadata(opts);
+await fullMetadataToOsdk(opts);
+
+const { stdout } = await execa("pnpm", [
+  "exec", "osdk", "unstable", "typescript", "generate", ...
+]);`,
 		notes: ["Public facade over the OAC pipeline; useful because compatibility bumps here usually mirror deeper compiler churn."],
 	},
 	"osdk-cli": {
 		inspectedVersion: "0.32.0-beta.3",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/cli/v/0.32.0-beta.3",
-		repoUrl: "https://github.com/palantir/osdk-ts",
+		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/cli",
+		publishedCodeUrl: "https://unpkg.com/@osdk/cli@0.32.0-beta.3/build/esm/siteDeployCommand-PLEDSCX7.js",
+		publishedCodePath: "build/esm/siteDeployCommand-PLEDSCX7.js",
 		codeUrl: "https://unpkg.com/@osdk/cli@0.32.0-beta.3/build/esm/siteDeployCommand-PLEDSCX7.js",
 		codePath: "build/esm/siteDeployCommand-PLEDSCX7.js",
 		codeLanguage: "js",
