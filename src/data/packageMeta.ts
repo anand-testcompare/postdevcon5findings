@@ -2,6 +2,10 @@ export type PackageMeta = {
 	inspectedVersion?: string;
 	registryLabel?: string;
 	registryUrl?: string;
+	latestReleaseVersion?: string;
+	latestReleasePublishedAt?: string;
+	latestReleaseUrl?: string;
+	latestReleaseSummary?: string;
 	repoUrl?: string;
 	codeUrl?: string;
 	codePath?: string;
@@ -56,6 +60,10 @@ const blockGeneratorResult = {
 		inspectedVersion: "2.8.0-beta.15",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/generator-converters/v/2.8.0-beta.15",
+		latestReleaseVersion: "2.7.5",
+		latestReleasePublishedAt: "2026-03-09T18:43:18.901Z",
+		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/generator-converters/v/2.7.5",
+		latestReleaseSummary: "Fresh stable publish, but the diff is mostly version alignment with @osdk/api rather than new converter behavior.",
 		repoUrl: "https://github.com/palantir/osdk-ts",
 		notes: ["Normalization layer where query execution semantics keep landing first."],
 	},
@@ -117,15 +125,30 @@ export function getOpenAiBaseUrl(client) {
 		inspectedVersion: "2.8.0-beta.15",
 		registryLabel: "npm",
 		registryUrl: "https://www.npmjs.com/package/@osdk/create-app/v/2.8.0-beta.15",
+		latestReleaseVersion: "2.7.5",
+		latestReleasePublishedAt: "2026-03-09T18:43:24.757Z",
+		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/create-app/v/2.7.5",
+		latestReleaseSummary: "Fresh stable release; the clearest user-facing change is the bundled starter templates moving to Vite ^7.3.1.",
 		repoUrl: "https://github.com/palantir/osdk-ts",
 		codeUrl: "https://unpkg.com/@osdk/create-app@2.8.0-beta.15/build/esm/index.js",
 		codePath: "build/esm/index.js",
 		codeLanguage: "js",
 		codeSnippet: `async function promptSdkVersion({ sdkVersion, template }) {
-  if (sdkVersion == null) {
-    return Object.keys(template.files).at(-1);
-  }
-}`,
+	  if (sdkVersion == null) {
+	    return Object.keys(template.files).at(-1);
+	  }
+	}`,
+	},
+	"osdk-vite-plugin-oac": {
+		inspectedVersion: "0.5.6",
+		registryLabel: "npm",
+		registryUrl: "https://www.npmjs.com/package/@osdk/vite-plugin-oac/v/0.5.6",
+		latestReleaseVersion: "0.5.6",
+		latestReleasePublishedAt: "2026-03-09T18:43:42.293Z",
+		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/vite-plugin-oac/v/0.5.6",
+		latestReleaseSummary: "Fresh OAC-side release, but this patch looks like a dependency rollup across @osdk/api, client.unstable, and ontology IR converters.",
+		repoUrl: "https://github.com/palantir/osdk-ts",
+		notes: ["Public facade over the OAC pipeline; useful because compatibility bumps here usually mirror deeper compiler churn."],
 	},
 	"osdk-cli": {
 		inspectedVersion: "0.32.0-beta.3",

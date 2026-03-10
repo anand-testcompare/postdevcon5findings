@@ -142,6 +142,12 @@ hr {
 	color: var(--ink-muted);
 }
 
+.compact-lede {
+	max-width: 64rem;
+	font-size: 1rem;
+	margin-bottom: 1rem;
+}
+
 .section {
 	margin-top: 2rem;
 	padding: 1.6rem;
@@ -415,9 +421,16 @@ hr {
 	box-shadow: none;
 }
 
+.release-callout {
+	display: grid;
+	gap: 0.2rem;
+	margin-bottom: 1rem;
+	background: rgba(220, 233, 230, 0.52);
+}
+
 .package-meta-grid {
 	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 	gap: 0.8rem;
 	margin-bottom: 0.6rem;
 }
@@ -518,9 +531,6 @@ hr {
 		flex-direction: column;
 		align-items: flex-start;
 	}
-	.package-meta-grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
 }
 
 @media (max-width: 720px) {
@@ -540,9 +550,6 @@ hr {
 	.hero-panel {
 		padding: 1.15rem;
 		border-radius: 24px;
-	}
-	.package-meta-grid {
-		grid-template-columns: 1fr;
 	}
 	.dense-table {
 		min-width: 720px;
