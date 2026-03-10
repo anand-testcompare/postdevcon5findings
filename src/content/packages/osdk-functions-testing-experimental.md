@@ -23,4 +23,4 @@ Instead of assuming all interesting testing happens inside Foundry, it suggests 
 
 That fits the broader discovery and SDK-generation story: ontology and function development are becoming more toolable outside the platform UI.
 
-Unlike some of the recent patch-only churn elsewhere, this package gained real behavior quickly: object mocking, object-set mocking, then query stubbing and exported helpers. That is a substantive increase in local test ergonomics.
+This package gained useful behavior quickly: object mocking, object-set mocking, then query stubbing and exported helpers. That is a substantive increase in local test ergonomics.

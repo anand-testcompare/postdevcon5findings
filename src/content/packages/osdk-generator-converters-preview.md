@@ -19,10 +19,10 @@ seamIds:
   - publicized-bridge-layer
 ---
 
-This is one of the few packages where the new capability is concrete, not cosmetic.
+This is one of the packages where the new capability is easiest to trace directly in code.
 
 It takes Ontology IR, enriches it into preview full metadata, optionally discovers TypeScript and Python functions, and then drives `@osdk/generator`.
 
-The Python path is especially revealing: it generates a temporary Python SDK first so Python functions can import ontology types during discovery. That is a real compiler-pipeline behavior, not a superficial wrapper.
+The Python path is especially revealing: it generates a temporary Python SDK first so Python functions can import ontology types during discovery. That is compiler-pipeline behavior, not only packaging around existing steps.
 
-That combination makes the package look less like a one-off helper and more like a partially externalized internal pipeline.
+That combination makes the package look less like a narrow helper and more like a partially externalized internal pipeline.

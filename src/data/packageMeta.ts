@@ -45,7 +45,7 @@ async function loadFunctionDiscoverer() {
   }
 }`,
 		notes: [
-			"Public DSL is real; TS function discovery is still a private seam.",
+			"Broad public DSL; TypeScript function discovery still crosses a private boundary.",
 		],
 	},
 	"osdk-maker-experimental": {
@@ -205,7 +205,7 @@ await generateClientSdkVersionTwoPointZero(metadata, ...);`,
 		latestReleaseVersion: "0.5.6",
 		latestReleasePublishedAt: "2026-03-09T18:43:42.293Z",
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/vite-plugin-oac/v/0.5.6",
-		latestReleaseSummary: "Fresh OAC-side release, but this patch looks like a dependency rollup across @osdk/api, client.unstable, and ontology IR converters.",
+		latestReleaseSummary: "Fresh OAC-side release; the visible change in this patch is mostly version alignment across @osdk/api, client.unstable, and ontology IR converters.",
 		latestReleaseFeatured: true,
 		repoUrl: "https://github.com/palantir/osdk-ts/tree/main/packages/vite-plugin-oac",
 		sourceUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/vite-plugin-oac/src/generateOntologyAssets.ts",
@@ -222,7 +222,7 @@ await fullMetadataToOsdk(opts);
 const { stdout } = await execa("pnpm", [
   "exec", "osdk", "unstable", "typescript", "generate", ...
 ]);`,
-		notes: ["Public facade over the OAC pipeline; useful because compatibility bumps here usually mirror deeper compiler churn."],
+		notes: ["Public Vite entry point into the OAC pipeline; compatibility bumps here often mirror deeper compiler-layer changes."],
 	},
 	"osdk-cli": {
 		inspectedVersion: "0.32.0-beta.3",

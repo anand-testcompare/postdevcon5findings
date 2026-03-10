@@ -14,4 +14,4 @@ evidenceRefs:
 
 This is the sharpest seam in the whole public OAC story.
 
-Maker is public and real, but one of its most strategically important flows is not self-contained in public npm. That makes the package simultaneously credible and incomplete.
+Maker is public, but one of its most strategically important flows is not self-contained in public npm. That makes the package both valuable and still dependent on a private runtime boundary.

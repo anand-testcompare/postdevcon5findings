@@ -11,7 +11,7 @@ keyTakeaways:
   - Wires raw ontology/query structures into the metadata shapes the generated SDK actually uses.
   - Real capability changes landed here for branch-aware queries, transaction IDs, media query IO, formatting, and interface-property handling.
   - Reveals where new semantics often land before they become obvious in higher-level tooling.
-  - The 2.7.5 stable patch itself is low-signal; the important changes are earlier minor additions in the 2.6/2.7/2.8 line.
+  - The 2.7.5 stable patch itself is mostly version alignment; the important changes are earlier minor additions in the 2.6/2.7/2.8 line.
 topicIds:
   - oac-compiler-stack
 seamIds: []
@@ -25,4 +25,4 @@ Watching this layer helps explain functional change, because it is where executi
 
 The meaningful additions were not the most recent stable patch. They were changes like branch execution support, transaction IDs on queries, media query types, and interface-property metadata improvements. Those are exactly the kinds of semantics that later show up as “new SDK behavior.”
 
-In other words, this package remains strategically important even when an individual patch release is mostly a coordinated rollup.
+In other words, this package remains strategically important even when an individual patch release is mostly coordinated version alignment.
