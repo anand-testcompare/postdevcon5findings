@@ -23,4 +23,4 @@ Maker Experimental is the strongest public sign that Palantir is rewriting or re
 
 Its CLI writes `ontology.json` plus a `BlockGeneratorResult` with input and output shapes, which strongly suggests it is exposing a platform ingestion boundary rather than only a DX-facing workflow.
 
-That is why this package matters more than a simple `experimental` label suggests: it makes backend-oriented compiler artifacts visible in public source, not just the authoring syntax.
+That is why this package matters more than a simple `experimental` label suggests: it makes backend-oriented compiler artifacts visible in public source alongside the authoring syntax.

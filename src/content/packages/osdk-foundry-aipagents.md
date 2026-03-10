@@ -16,4 +16,4 @@ topicIds:
 seamIds: []
 ---
 
-This namespace is mostly generated, but that is part of the point: agent functionality is no longer only implied by marketing. It is visible in the public package graph as a concrete API surface.
+This namespace is mostly generated, but that is part of the point: agent functionality is visible in the public package graph as a concrete API surface.

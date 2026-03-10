@@ -22,17 +22,17 @@ const corePackages = packages.slice(0, 6);
 >
 	<section class="section dense-summary">
 		<p class="eyebrow">Post-DevCon 5 Findings</p>
-		<h1>DevCon 5 surfaced a broader public compiler stack, not just a bigger SDK.</h1>
+		<h1>DevCon 5 expanded the public OSDK toolchain beyond app SDK generation.</h1>
 		<p class="lede">
-			The important read is where the public graph now exposes actual generation and compile boundaries:
-			Maker, Maker Experimental, preview converters, OAC wrappers, and the still-unresolved private
-			TypeScript discovery seam.
+			The clearest pattern is how generation and compile-adjacent layers now show up in public packages:
+			Maker, Maker Experimental, preview converters, OAC wrappers, and the remaining TypeScript
+			discovery boundary.
 		</p>
 		<div class="meta-row">
 			<span>{packages.length} packages tracked</span>
 			<span>{seams.length} seam patterns</span>
 			<span>priority-first package ordering</span>
-			<span>technical audience / low-commentary view</span>
+			<span>technical notes / package-first view</span>
 		</div>
 	</section>
 
@@ -143,7 +143,7 @@ const corePackages = packages.slice(0, 6);
 		<div class="section-header">
 			<div>
 				<p class="eyebrow">Seams</p>
-				<h2>Highest-signal boundary issues</h2>
+				<h2>Highest-signal boundaries</h2>
 			</div>
 			<a class="link-arrow" href="/seams">All seams -></a>
 		</div>

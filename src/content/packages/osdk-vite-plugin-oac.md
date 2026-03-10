@@ -10,14 +10,14 @@ repo: https://github.com/palantir/osdk-ts
 keyTakeaways:
   - Runs Maker, IR-to-metadata conversion, and OSDK generation as part of Vite dev/build.
   - Shows the public OAC workflow being shaped around ordinary frontend tooling rather than a separate compiler UX.
-  - Recent stable patches are mostly compatibility churn; the meaningful feature is the three-stage build pipeline itself.
+  - Recent stable patches are mostly compatibility alignment; the meaningful feature is the three-stage build pipeline itself.
 topicIds:
   - oac-compiler-stack
 seamIds:
   - public-wrapper-private-core
 ---
 
-`@osdk/vite-plugin-oac` matters because it is not just a thin config wrapper. It explicitly orchestrates three steps: ontology source to IR, IR to full metadata, and full metadata to generated OSDK output.
+`@osdk/vite-plugin-oac` matters because it does more than expose config. It explicitly orchestrates three steps: ontology source to IR, IR to full metadata, and full metadata to generated OSDK output.
 
 That means Palantir is turning ontology-as-code into something a frontend developer can run inside a normal Vite loop, instead of treating compilation as a totally separate internal pipeline.
 
