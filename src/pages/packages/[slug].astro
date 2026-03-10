@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import SiteShell from '../../layouts/SiteShell.astro';
 import StatusPill from '../../components/StatusPill.astro';
+import CodePreview from '../../components/CodePreview.astro';
 import { packageMeta } from '../../data/packageMeta';
 
 export async function getStaticPaths() {
@@ -67,10 +68,14 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 					<p class="eyebrow">Relevant code</p>
 					<h2>Most revealing snippet</h2>
 				</div>
-				{meta.codeUrl && <a class="link-arrow" href={meta.codeUrl} target="_blank" rel="noreferrer">Open source file -></a>}
 			</div>
-			{meta.codePath && <p class="table-subtle">{meta.codePath}</p>}
-			<pre><code>{meta.codeSnippet}</code></pre>
+			<CodePreview
+				code={meta.codeSnippet}
+				lang={meta.codeLanguage ?? 'text'}
+				title={meta.codePath}
+				href={meta.codeUrl}
+				label="open published code"
+			/>
 		</section>
 	)}
 
