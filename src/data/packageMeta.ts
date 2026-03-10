@@ -6,6 +6,7 @@ export type PackageMeta = {
 	latestReleasePublishedAt?: string;
 	latestReleaseUrl?: string;
 	latestReleaseSummary?: string;
+	latestReleaseFeatured?: boolean;
 	repoUrl?: string;
 	codeUrl?: string;
 	codePath?: string;
@@ -129,6 +130,7 @@ export function getOpenAiBaseUrl(client) {
 		latestReleasePublishedAt: "2026-03-09T18:43:24.757Z",
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/create-app/v/2.7.5",
 		latestReleaseSummary: "Fresh stable release; the clearest user-facing change is the bundled starter templates moving to Vite ^7.3.1.",
+		latestReleaseFeatured: true,
 		repoUrl: "https://github.com/palantir/osdk-ts",
 		codeUrl: "https://unpkg.com/@osdk/create-app@2.8.0-beta.15/build/esm/index.js",
 		codePath: "build/esm/index.js",
@@ -147,6 +149,7 @@ export function getOpenAiBaseUrl(client) {
 		latestReleasePublishedAt: "2026-03-09T18:43:42.293Z",
 		latestReleaseUrl: "https://www.npmjs.com/package/@osdk/vite-plugin-oac/v/0.5.6",
 		latestReleaseSummary: "Fresh OAC-side release, but this patch looks like a dependency rollup across @osdk/api, client.unstable, and ontology IR converters.",
+		latestReleaseFeatured: true,
 		repoUrl: "https://github.com/palantir/osdk-ts",
 		notes: ["Public facade over the OAC pipeline; useful because compatibility bumps here usually mirror deeper compiler churn."],
 	},

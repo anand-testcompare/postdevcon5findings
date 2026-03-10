@@ -34,7 +34,7 @@ const packages = (await getCollection('packages')).sort(
 							{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
 							{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
 						</div>
-						{meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
+						{meta.latestReleaseFeatured && meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
 						<ul class="plain-list compact-list">
 							{entry.data.keyTakeaways.slice(0, 2).map((item: string) => <li class="list-card">{item}</li>)}
 						</ul>

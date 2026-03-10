@@ -12,8 +12,8 @@ const packages = (await getCollection('packages')).sort(
 );
 const seams = await getCollection('seams');
 const recentPackages = packages.slice(0, 5);
-const freshReleases = packages
-	.filter((entry) => packageMeta[entry.id]?.latestReleasePublishedAt?.startsWith('2026-03-09'))
+const highlightedReleases = packages
+	.filter((entry) => packageMeta[entry.id]?.latestReleaseFeatured)
 	.sort((a, b) => {
 		const aPublished = packageMeta[a.id]?.latestReleasePublishedAt ?? '';
 		const bPublished = packageMeta[b.id]?.latestReleasePublishedAt ?? '';
@@ -38,7 +38,7 @@ const freshReleases = packages
 		<div class="meta-row">
 			<span>{packages.length} packages tracked</span>
 			<span>{seams.length} seam patterns</span>
-			<span>{freshReleases.length} fresh releases in the last 24h</span>
+			<span>{highlightedReleases.length} meaningful current release signals</span>
 			<span>technical audience / low-commentary view</span>
 		</div>
 	</section>
@@ -46,16 +46,16 @@ const freshReleases = packages
 	<section class="section">
 		<div class="section-header">
 			<div>
-				<p class="eyebrow">Fresh in last 24h</p>
-				<h2>Release wave, not a brand-new surface</h2>
+				<p class="eyebrow">Meaningful now</p>
+				<h2>Keep only the live signals that matter</h2>
 			</div>
 			<a class="link-arrow" href="/packages">Inventory view -></a>
 		</div>
 		<p class="lede compact-lede">
-			The visible shift is a coordinated stable publish wave: `@osdk/create-app` and the widget starters moved templates to Vite `^7.3.1`, while converter and OAC packages mostly rolled forward for compatibility.
+			The point is not every patch in the last day. The point is the post-DevCon public toolchain is still moving where it matters: generated app starters are getting maintained like real frontend products, and the OAC-facing public wrapper is staying in lockstep with deeper compiler layers.
 		</p>
 		<ul class="timeline-list">
-			{freshReleases.map((entry) => {
+			{highlightedReleases.map((entry) => {
 				const meta = packageMeta[entry.id]!;
 				return (
 					<li>

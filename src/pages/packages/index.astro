@@ -49,7 +49,7 @@ const packages = (await getCollection('packages')).sort(
 								<td><StatusPill status={entry.data.status} /></td>
 								<td>
 									<div>{entry.data.summary}</div>
-									{meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
+									{meta.latestReleaseFeatured && meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
 								</td>
 								<td>
 									<div class="table-links">
