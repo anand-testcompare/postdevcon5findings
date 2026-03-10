@@ -12,6 +12,13 @@ const packages = (await getCollection('packages')).sort(
 );
 const seams = await getCollection('seams');
 const recentPackages = packages.slice(0, 5);
+const freshReleases = packages
+	.filter((entry) => packageMeta[entry.id]?.latestReleasePublishedAt?.startsWith('2026-03-09'))
+	.sort((a, b) => {
+		const aPublished = packageMeta[a.id]?.latestReleasePublishedAt ?? '';
+		const bPublished = packageMeta[b.id]?.latestReleasePublishedAt ?? '';
+		return bPublished.localeCompare(aPublished);
+	});
 ---
 
 <SiteShell
@@ -31,8 +38,39 @@ const recentPackages = packages.slice(0, 5);
 		<div class="meta-row">
 			<span>{packages.length} packages tracked</span>
 			<span>{seams.length} seam patterns</span>
+			<span>{freshReleases.length} fresh releases in the last 24h</span>
 			<span>technical audience / low-commentary view</span>
 		</div>
+	</section>
+
+	<section class="section">
+		<div class="section-header">
+			<div>
+				<p class="eyebrow">Fresh in last 24h</p>
+				<h2>Release wave, not a brand-new surface</h2>
+			</div>
+			<a class="link-arrow" href="/packages">Inventory view -></a>
+		</div>
+		<p class="lede compact-lede">
+			The visible shift is a coordinated stable publish wave: `@osdk/create-app` and the widget starters moved templates to Vite `^7.3.1`, while converter and OAC packages mostly rolled forward for compatibility.
+		</p>
+		<ul class="timeline-list">
+			{freshReleases.map((entry) => {
+				const meta = packageMeta[entry.id]!;
+				return (
+					<li>
+						<strong>{entry.data.packageName} · {meta.latestReleaseVersion}</strong>
+						<div>{meta.latestReleaseSummary}</div>
+						<div class="meta-row">
+							<span>{meta.latestReleasePublishedAt?.slice(0, 10)}</span>
+							<StatusPill status={entry.data.status} />
+							{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">release</a>}
+							<a class="link-arrow" href={`/packages/${entry.id}`}>details -></a>
+						</div>
+					</li>
+				);
+			})}
+		</ul>
 	</section>
 
 	<section class="section">
@@ -76,6 +114,7 @@ const recentPackages = packages.slice(0, 5);
 						<th>First seen</th>
 						<th>Package</th>
 						<th>Inspected</th>
+						<th>Latest stable</th>
 						<th>Status</th>
 						<th>Why it matters</th>
 						<th>Links</th>
@@ -92,11 +131,13 @@ const recentPackages = packages.slice(0, 5);
 									<div class="table-subtle">{entry.data.kind}</div>
 								</td>
 								<td class="mono">{meta.inspectedVersion ?? '-'}</td>
+								<td class="mono">{meta.latestReleaseVersion ?? '-'}</td>
 								<td><StatusPill status={entry.data.status} /></td>
 								<td>{entry.data.summary}</td>
 								<td>
 									<div class="table-links">
 										{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+										{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
 										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
 										{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
 									</div>

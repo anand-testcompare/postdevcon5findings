@@ -33,15 +33,27 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 				<strong class="metric-code">{meta.inspectedVersion ?? '-'}</strong>
 			</div>
 			<div class="metric compact-metric">
+				<span class="table-subtle">latest stable</span>
+				<strong class="metric-code">{meta.latestReleaseVersion ?? '-'}</strong>
+			</div>
+			<div class="metric compact-metric">
 				<span class="table-subtle">status</span>
 				<div><StatusPill status={entry.data.status} /></div>
 			</div>
 		</div>
 		<div class="table-links top-links">
 			{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+			{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest release</a>}
 			{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
 			{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
 		</div>
+		{meta.latestReleaseSummary && (
+			<div class="list-card release-callout">
+				<strong>Latest release signal</strong>
+				<div>{meta.latestReleaseVersion} · {meta.latestReleasePublishedAt?.slice(0, 10)}</div>
+				<div>{meta.latestReleaseSummary}</div>
+			</div>
+		)}
 		<ul class="plain-list compact-list">
 			{entry.data.keyTakeaways.map((item: string) => <li class="list-card">{item}</li>)}
 			{meta.notes?.map((item) => <li class="list-card">{item}</li>)}

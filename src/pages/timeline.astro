@@ -28,9 +28,13 @@ const packages = (await getCollection('packages')).sort(
 						<div class="meta-row">
 							<StatusPill status={entry.data.status} />
 							{meta.inspectedVersion && <span>inspected {meta.inspectedVersion}</span>}
+							{meta.latestReleaseVersion && <span>latest {meta.latestReleaseVersion}</span>}
+							{meta.latestReleasePublishedAt && <span>published {meta.latestReleasePublishedAt.slice(0, 10)}</span>}
 							{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+							{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
 							{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
 						</div>
+						{meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
 						<ul class="plain-list compact-list">
 							{entry.data.keyTakeaways.slice(0, 2).map((item: string) => <li class="list-card">{item}</li>)}
 						</ul>

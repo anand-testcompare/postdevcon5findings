@@ -25,6 +25,7 @@ const packages = (await getCollection('packages')).sort(
 						<th>First seen</th>
 						<th>Package</th>
 						<th>Inspected</th>
+						<th>Latest stable</th>
 						<th>Status</th>
 						<th>Summary</th>
 						<th>Links</th>
@@ -41,11 +42,19 @@ const packages = (await getCollection('packages')).sort(
 									<div class="table-subtle">{entry.data.kind}</div>
 								</td>
 								<td class="mono">{meta.inspectedVersion ?? '-'}</td>
+								<td>
+									<div class="mono">{meta.latestReleaseVersion ?? '-'}</div>
+									{meta.latestReleasePublishedAt && <div class="table-subtle">{meta.latestReleasePublishedAt.slice(0, 10)}</div>}
+								</td>
 								<td><StatusPill status={entry.data.status} /></td>
-								<td>{entry.data.summary}</td>
+								<td>
+									<div>{entry.data.summary}</div>
+									{meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
+								</td>
 								<td>
 									<div class="table-links">
 										{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
+										{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
 										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
 										{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
 									</div>
