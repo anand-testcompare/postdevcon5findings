@@ -1,0 +1,90 @@
+---
+import { Code } from 'astro:components';
+import type { PackageCodeLanguage } from '../data/packageMeta';
+
+interface Props {
+	code: string;
+	lang?: PackageCodeLanguage;
+	title?: string;
+	href?: string;
+	label?: string;
+}
+
+const {
+	code,
+	lang = 'text',
+	title,
+	href,
+	label = 'open file',
+} = Astro.props;
+---
+
+<section class="code-preview">
+	{(title || href) && (
+		<div class="code-preview-header">
+			{title && <p class="code-preview-title">{title}</p>}
+			{href && (
+				<a class="code-preview-link" href={href} target="_blank" rel="noreferrer">{label} -></a>
+			)}
+		</div>
+	)}
+	<div class="code-preview-body">
+		<Code code={code} lang={lang} theme="github-dark" />
+	</div>
+</section>
+
+<style>
+	.code-preview {
+		border: 1px solid var(--border-color);
+		border-radius: 20px;
+		background: rgba(8, 18, 13, 0.96);
+		overflow: hidden;
+	}
+
+	.code-preview-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.8rem 1rem;
+		border-bottom: 1px solid var(--border-color);
+		background: rgba(20, 38, 28, 0.94);
+	}
+
+	.code-preview-title {
+		margin: 0;
+		font-family: "SFMono-Regular", "Menlo", "Monaco", "Liberation Mono", monospace;
+		font-size: 0.88rem;
+		color: var(--ink-muted);
+	}
+
+	.code-preview-link {
+		text-decoration: none;
+		font-size: 0.88rem;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
+	.code-preview-body :global(pre) {
+		margin: 0;
+		padding: 1rem 1.1rem;
+		border-radius: 0;
+		background: transparent;
+		color: inherit;
+		border: 0;
+		overflow-x: auto;
+	}
+
+	.code-preview-body :global(code) {
+		padding: 0;
+		background: transparent;
+		border-radius: 0;
+	}
+
+	@media (max-width: 720px) {
+		.code-preview-header {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+	}
+</style>

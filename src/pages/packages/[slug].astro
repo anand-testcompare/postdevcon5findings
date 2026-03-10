@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import SiteShell from '../../layouts/SiteShell.astro';
 import StatusPill from '../../components/StatusPill.astro';
+import CodePreview from '../../components/CodePreview.astro';
 import { packageMeta } from '../../data/packageMeta';
 
 export async function getStaticPaths() {
@@ -67,9 +68,14 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 					{meta.publishedCodeUrl && <a class="link-arrow" href={meta.publishedCodeUrl} target="_blank" rel="noreferrer">Open published build -></a>}
 				</div>
 			</div>
-			{meta.codePath && <p class="table-subtle">source: {meta.codePath}</p>}
 			{meta.publishedCodePath && <p class="table-subtle">published: {meta.publishedCodePath}</p>}
-			<pre><code>{meta.codeSnippet}</code></pre>
+			<CodePreview
+				code={meta.codeSnippet}
+				lang={meta.codeLanguage ?? 'text'}
+				title={meta.codePath ?? meta.publishedCodePath}
+				href={meta.sourceUrl ?? meta.codeUrl ?? meta.publishedCodeUrl}
+				label={meta.sourceUrl || meta.codeUrl ? 'open source file' : 'open published build'}
+			/>
 		</section>
 	)}
 
