@@ -21,7 +21,7 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 <SiteShell title={entry.data.title} eyebrow="Package" intro={entry.data.summary} description={entry.data.summary}>
 	<section class="section">
 		<div class="package-meta-grid">
-			<div class="metric compact-metric">
+			<div class="metric compact-metric package-metric">
 				<span class="table-subtle">package</span>
 				<strong class="metric-code">{entry.data.packageName}</strong>
 			</div>
@@ -45,16 +45,11 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 		<div class="table-links top-links">
 			{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
 			{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest release</a>}
-			{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
-			{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+			{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">package source</a>}
+			{meta.sourceUrl && <a href={meta.sourceUrl} target="_blank" rel="noreferrer">source file</a>}
+			{meta.publishedCodeUrl && <a href={meta.publishedCodeUrl} target="_blank" rel="noreferrer">published build</a>}
+			{!meta.publishedCodeUrl && meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
 		</div>
-		{meta.latestReleaseSummary && (
-			<div class="list-card release-callout">
-				<strong>Latest release signal</strong>
-				<div>{meta.latestReleaseVersion} · {meta.latestReleasePublishedAt?.slice(0, 10)}</div>
-				<div>{meta.latestReleaseSummary}</div>
-			</div>
-		)}
 		<ul class="plain-list compact-list">
 			{entry.data.keyTakeaways.map((item: string) => <li class="list-card">{item}</li>)}
 			{meta.notes?.map((item) => <li class="list-card">{item}</li>)}
@@ -66,15 +61,20 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 			<div class="section-header">
 				<div>
 					<p class="eyebrow">Relevant code</p>
-					<h2>Most revealing snippet</h2>
+					<h2>Most revealing source snippet</h2>
+				</div>
+				<div class="table-links">
+					{meta.sourceUrl && <a class="link-arrow" href={meta.sourceUrl} target="_blank" rel="noreferrer">Open source file -></a>}
+					{meta.publishedCodeUrl && <a class="link-arrow" href={meta.publishedCodeUrl} target="_blank" rel="noreferrer">Open published build -></a>}
 				</div>
 			</div>
+			{meta.publishedCodePath && <p class="table-subtle">published: {meta.publishedCodePath}</p>}
 			<CodePreview
 				code={meta.codeSnippet}
 				lang={meta.codeLanguage ?? 'text'}
-				title={meta.codePath}
-				href={meta.codeUrl}
-				label="open published code"
+				title={meta.codePath ?? meta.publishedCodePath}
+				href={meta.sourceUrl ?? meta.codeUrl ?? meta.publishedCodeUrl}
+				label={meta.sourceUrl || meta.codeUrl ? 'open source file' : 'open published build'}
 			/>
 		</section>
 	)}
@@ -83,7 +83,7 @@ const relatedSeams = seams.filter((item) => entry.data.seamIds.includes(item.id)
 		<div class="section-header">
 			<div>
 				<p class="eyebrow">Notes</p>
-				<h2>What changed</h2>
+				<h2>Why it matters</h2>
 			</div>
 		</div>
 		<div class="prose">

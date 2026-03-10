@@ -1,6 +1,6 @@
 ---
 title: Vite Plugin OAC
-summary: The public Vite-facing wrapper around OAC generation, useful mostly because its release cadence exposes compiler-side compatibility movement.
+summary: The public Vite-facing wrapper around the OAC pipeline, important because it turns ontology compilation into a normal dev-server/build step.
 packageName: '@osdk/vite-plugin-oac'
 kind: OAC build plugin
 status: public
@@ -8,17 +8,17 @@ importance: medium
 firstSeen: 2025-06
 repo: https://github.com/palantir/osdk-ts
 keyTakeaways:
-  - Sits at the public edge of the ontology-as-code compile and generation path.
-  - Patch releases often mirror dependency motion in @osdk/api, client.unstable, and ontology IR converters.
-  - The fresh 0.5.6 release looks like compatibility maintenance rather than a new developer-facing feature.
+  - Runs Maker, IR-to-metadata conversion, and OSDK generation as part of Vite dev/build.
+  - Shows the public OAC workflow being shaped around ordinary frontend tooling rather than a separate compiler UX.
+  - Recent stable patches are mostly compatibility churn; the meaningful feature is the three-stage build pipeline itself.
 topicIds:
   - oac-compiler-stack
 seamIds:
   - public-wrapper-private-core
 ---
 
-`@osdk/vite-plugin-oac` is interesting less because of its own API surface and more because it is one of the cleanest public hints that the OAC toolchain is being productized behind a normal frontend workflow.
+`@osdk/vite-plugin-oac` matters because it is not just a thin config wrapper. It explicitly orchestrates three steps: ontology source to IR, IR to full metadata, and full metadata to generated OSDK output.
 
-The latest 0.5.6 stable publish landed in the same release wave as the 2.7.5 OSDK packages.
+That means Palantir is turning ontology-as-code into something a frontend developer can run inside a normal Vite loop, instead of treating compilation as a totally separate internal pipeline.
 
-From the public changelog and package diff, this patch looks like a dependency rollup across the OAC pipeline rather than a brand-new plugin feature. That still matters: it suggests the public wrapper is being kept in lockstep with deeper compiler layers.
+The recent 0.5.6 stable patch is not the interesting part. The interesting part is that this package exists at all, and that its internals openly call Maker, metadata conversion, and `osdk unstable typescript generate` in sequence.

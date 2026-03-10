@@ -2,28 +2,25 @@
 import { getCollection } from 'astro:content';
 import SiteShell from '../../layouts/SiteShell.astro';
 import StatusPill from '../../components/StatusPill.astro';
-import { compareFirstSeenDesc, packageMeta } from '../../data/packageMeta';
+import { comparePackagePriority, packageMeta } from '../../data/packageMeta';
 import { importanceOrder } from '../../data/research';
 
-const packages = (await getCollection('packages')).sort(
-	(a, b) =>
-		compareFirstSeenDesc(a.data.firstSeen, b.data.firstSeen)
-		|| importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
-);
+const packages = (await getCollection('packages')).sort((a, b) => comparePackagePriority(a, b, importanceOrder));
 ---
 
 <SiteShell
 	title="Packages"
 	eyebrow="By package"
-	intro="Dense inventory view: versions, timing, purpose, and direct links out to package pages, repos, and inspected code."
+	intro="Priority-first inventory view: high-signal packages rise to the top, with versions, timing, purpose, and direct links out to package pages, repos, and inspected code."
 >
 	<section class="section">
 		<div class="table-wrap">
 			<table class="dense-table">
 				<thead>
 					<tr>
-						<th>First seen</th>
+						<th>Priority</th>
 						<th>Package</th>
+						<th>First seen</th>
 						<th>Inspected</th>
 						<th>Latest stable</th>
 						<th>Status</th>
@@ -36,11 +33,12 @@ const packages = (await getCollection('packages')).sort(
 						const meta = packageMeta[entry.id] ?? {};
 						return (
 							<tr>
-								<td class="mono">{entry.data.firstSeen}</td>
+								<td class="mono">{entry.data.importance}</td>
 								<td>
 									<a href={`/packages/${entry.id}`}>{entry.data.packageName}</a>
 									<div class="table-subtle">{entry.data.kind}</div>
 								</td>
+								<td class="mono">{entry.data.firstSeen}</td>
 								<td class="mono">{meta.inspectedVersion ?? '-'}</td>
 								<td>
 									<div class="mono">{meta.latestReleaseVersion ?? '-'}</div>
@@ -49,14 +47,13 @@ const packages = (await getCollection('packages')).sort(
 								<td><StatusPill status={entry.data.status} /></td>
 								<td>
 									<div>{entry.data.summary}</div>
-									{meta.latestReleaseSummary && <div class="table-subtle">{meta.latestReleaseSummary}</div>}
 								</td>
 								<td>
 									<div class="table-links">
 										{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
 										{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
-										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
-										{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">source</a>}
+										{meta.sourceUrl && <a href={meta.sourceUrl} target="_blank" rel="noreferrer">file</a>}
 									</div>
 								</td>
 							</tr>

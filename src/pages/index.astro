@@ -2,23 +2,17 @@
 import { getCollection } from 'astro:content';
 import SiteShell from '../layouts/SiteShell.astro';
 import StatusPill from '../components/StatusPill.astro';
-import { importanceOrder } from '../data/research';
-import { compareFirstSeenDesc, packageMeta } from '../data/packageMeta';
+import { homepageHighlights, importanceOrder, workflowSteps } from '../data/research';
+import { compareFirstSeenDesc, comparePackagePriority, packageMeta } from '../data/packageMeta';
 
-const packages = (await getCollection('packages')).sort(
+const timelinePackages = (await getCollection('packages')).sort(
 	(a, b) =>
 		compareFirstSeenDesc(a.data.firstSeen, b.data.firstSeen)
 		|| importanceOrder[a.data.importance] - importanceOrder[b.data.importance],
 );
+const packages = [...timelinePackages].sort((a, b) => comparePackagePriority(a, b, importanceOrder));
 const seams = await getCollection('seams');
-const recentPackages = packages.slice(0, 5);
-const freshReleases = packages
-	.filter((entry) => packageMeta[entry.id]?.latestReleasePublishedAt?.startsWith('2026-03-09'))
-	.sort((a, b) => {
-		const aPublished = packageMeta[a.id]?.latestReleasePublishedAt ?? '';
-		const bPublished = packageMeta[b.id]?.latestReleasePublishedAt ?? '';
-		return bPublished.localeCompare(aPublished);
-	});
+const corePackages = packages.slice(0, 6);
 ---
 
 <SiteShell
@@ -28,67 +22,60 @@ const freshReleases = packages
 >
 	<section class="section dense-summary">
 		<p class="eyebrow">Post-DevCon 5 Findings</p>
-		<h1>Public surface area expanded beyond the original OSDK story.</h1>
+		<h1>DevCon 5 surfaced a broader public compiler stack, not just a bigger SDK.</h1>
 		<p class="lede">
-			Net-new signals include a real ontology-as-code DSL, a visible compiler/backend rewrite,
-			preview converter/generator bridges, local function-testing helpers, thin AI proxy helpers,
-			and adjacent Python runtime/connectivity libraries. The sharpest unresolved seam is still
-			Maker's dependency on private TypeScript discovery.
+			The important read is where the public graph now exposes actual generation and compile boundaries:
+			Maker, Maker Experimental, preview converters, OAC wrappers, and the still-unresolved private
+			TypeScript discovery seam.
 		</p>
 		<div class="meta-row">
 			<span>{packages.length} packages tracked</span>
 			<span>{seams.length} seam patterns</span>
-			<span>{freshReleases.length} fresh releases in the last 24h</span>
+			<span>priority-first package ordering</span>
 			<span>technical audience / low-commentary view</span>
 		</div>
 	</section>
 
 	<section class="section">
-		<div class="section-header">
-			<div>
-				<p class="eyebrow">Fresh in last 24h</p>
-				<h2>Release wave, not a brand-new surface</h2>
-			</div>
-			<a class="link-arrow" href="/packages">Inventory view -></a>
+		<div class="card-grid compact-grid">
+			<article class="card span-6 compact-card">
+				<p class="eyebrow">Key claims</p>
+				<ul class="plain-list compact-list single-column-list">
+					{homepageHighlights.slice(0, 4).map((item) => <li class="list-card">{item}</li>)}
+				</ul>
+			</article>
+			<article class="card span-6 compact-card">
+				<p class="eyebrow">Working model</p>
+				<ul class="plain-list compact-list single-column-list">
+					{workflowSteps.map((step) => (
+						<li class="list-card">
+							<strong>{step.title}</strong>
+							<div>{step.detail}</div>
+						</li>
+					))}
+				</ul>
+			</article>
 		</div>
-		<p class="lede compact-lede">
-			The visible shift is a coordinated stable publish wave: `@osdk/create-app` and the widget starters moved templates to Vite `^7.3.1`, while converter and OAC packages mostly rolled forward for compatibility.
-		</p>
-		<ul class="timeline-list">
-			{freshReleases.map((entry) => {
-				const meta = packageMeta[entry.id]!;
-				return (
-					<li>
-						<strong>{entry.data.packageName} · {meta.latestReleaseVersion}</strong>
-						<div>{meta.latestReleaseSummary}</div>
-						<div class="meta-row">
-							<span>{meta.latestReleasePublishedAt?.slice(0, 10)}</span>
-							<StatusPill status={entry.data.status} />
-							{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">release</a>}
-							<a class="link-arrow" href={`/packages/${entry.id}`}>details -></a>
-						</div>
-					</li>
-				);
-			})}
-		</ul>
 	</section>
 
 	<section class="section">
 		<div class="section-header">
 			<div>
-				<p class="eyebrow">Newest first</p>
-				<h2>Recent public additions</h2>
+				<p class="eyebrow">Read first</p>
+				<h2>Highest-signal packages</h2>
 			</div>
-			<a class="link-arrow" href="/timeline">Full timeline -></a>
+			<a class="link-arrow" href="/packages">Full inventory -></a>
 		</div>
 		<ul class="timeline-list">
-			{recentPackages.map((entry) => {
+			{corePackages.map((entry) => {
 				const meta = packageMeta[entry.id];
 				return (
 					<li>
-						<strong>{entry.data.firstSeen} · {entry.data.packageName}</strong>
+						<strong>{entry.data.packageName}</strong>
 						<div>{entry.data.summary}</div>
 						<div class="meta-row">
+							<span>{entry.data.importance} signal</span>
+							<span>first seen {entry.data.firstSeen}</span>
 							<StatusPill status={entry.data.status} />
 							{meta?.inspectedVersion && <span>inspected {meta.inspectedVersion}</span>}
 							<a class="link-arrow" href={`/packages/${entry.id}`}>details -></a>
@@ -111,8 +98,9 @@ const freshReleases = packages
 			<table class="dense-table">
 				<thead>
 					<tr>
-						<th>First seen</th>
+						<th>Priority</th>
 						<th>Package</th>
+						<th>First seen</th>
 						<th>Inspected</th>
 						<th>Latest stable</th>
 						<th>Status</th>
@@ -125,11 +113,12 @@ const freshReleases = packages
 						const meta = packageMeta[entry.id] ?? {};
 						return (
 							<tr>
-								<td class="mono">{entry.data.firstSeen}</td>
+								<td class="mono">{entry.data.importance}</td>
 								<td>
 									<a href={`/packages/${entry.id}`}>{entry.data.packageName}</a>
 									<div class="table-subtle">{entry.data.kind}</div>
 								</td>
+								<td class="mono">{entry.data.firstSeen}</td>
 								<td class="mono">{meta.inspectedVersion ?? '-'}</td>
 								<td class="mono">{meta.latestReleaseVersion ?? '-'}</td>
 								<td><StatusPill status={entry.data.status} /></td>
@@ -138,8 +127,8 @@ const freshReleases = packages
 									<div class="table-links">
 										{meta.registryUrl && <a href={meta.registryUrl} target="_blank" rel="noreferrer">{meta.registryLabel ?? 'registry'}</a>}
 										{meta.latestReleaseUrl && meta.latestReleaseUrl !== meta.registryUrl && <a href={meta.latestReleaseUrl} target="_blank" rel="noreferrer">latest</a>}
-										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">repo</a>}
-										{meta.codeUrl && <a href={meta.codeUrl} target="_blank" rel="noreferrer">code</a>}
+										{meta.repoUrl && <a href={meta.repoUrl} target="_blank" rel="noreferrer">source</a>}
+										{meta.sourceUrl && <a href={meta.sourceUrl} target="_blank" rel="noreferrer">file</a>}
 									</div>
 								</td>
 							</tr>

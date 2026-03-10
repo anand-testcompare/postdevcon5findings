@@ -1,6 +1,6 @@
 ---
 title: Language Models
-summary: A thin helper package for Foundry-proxied model access, notable more for strategic direction than implementation depth.
+summary: A tiny package, but a real public signal that Foundry model-proxy access is being normalized around the PlatformClient.
 packageName: '@osdk/language-models'
 kind: model proxy helper
 status: public
@@ -8,9 +8,9 @@ importance: medium
 firstSeen: 2026-03
 repo: https://github.com/palantir/osdk-ts
 keyTakeaways:
-  - Small wrapper around auth and proxy plumbing for OpenAI and Anthropic endpoints.
-  - Not a full agent or orchestration framework.
-  - Signals that LLM access is becoming a normalized SDK-adjacent workflow.
+  - Wraps `PlatformClient` auth and fetch behavior for OpenAI and Anthropic proxy endpoints.
+  - Does not ship an agent framework; it standardizes connection plumbing only.
+  - Matters because it productizes Foundry LLM proxy access as normal app code, not a one-off internal helper.
 topicIds:
   - ai-and-agents
 seamIds: []
@@ -18,4 +18,6 @@ seamIds: []
 
 The package is technically small, but strategically meaningful.
 
-It shows Palantir making Foundry's model proxying easier to consume from application code without forcing a larger opinionated AI runtime into the public story.
+What is actually new is not complex orchestration logic. It is the decision to expose a clean public path for using existing model SDKs through Foundry's proxy by reusing the same `PlatformClient` token provider and fetch implementation.
+
+That makes `@osdk/language-models` relevant as a direction-of-travel signal: Palantir is telling developers to keep using normal OpenAI/Anthropic clients, but route them through Foundry's auth and proxy surface.

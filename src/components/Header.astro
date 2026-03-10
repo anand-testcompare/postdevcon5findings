@@ -23,7 +23,7 @@ import { SITE_TITLE } from '../consts';
 		margin: 0;
 		padding: 0 1.25rem;
 		backdrop-filter: blur(18px);
-		background: color-mix(in srgb, var(--surface) 85%, transparent);
+		background: color-mix(in srgb, var(--surface) 78%, transparent);
 		border-bottom: 1px solid var(--border-color);
 	}
 	h2 {
@@ -65,7 +65,7 @@ import { SITE_TITLE } from '../consts';
 		text-decoration: none;
 	}
 	.internal-links :global(a.active) {
-		background: rgba(17, 84, 105, 0.12);
+		background: color-mix(in srgb, var(--accent) 16%, transparent);
 		color: var(--ink-strong);
 	}
 	@media (max-width: 900px) {
