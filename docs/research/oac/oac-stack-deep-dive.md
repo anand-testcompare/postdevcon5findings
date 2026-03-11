@@ -1,184 +1,137 @@
 # OAC Compiler Stack Deep Dive
 
+Provenance note: this document is based on public GitHub repositories, public npm/PyPI package pages, and public published builds on unpkg.
+
 ## Main conclusion
 
-Palantir now has a real public ontology-as-code stack, but it is not yet a cleanly productized single pipeline. What is public today looks like three layers that were opened at different times:
+The public OSDK toolchain now spans three visible layers:
 
-1. authoring DSL (`@osdk/maker`)
-2. conversion/compiler plumbing (`@osdk/generator-converters*`, `@osdk/maker-experimental`)
-3. downstream app bootstrap and deployment (`@osdk/create-app`, `@osdk/cli`)
+1. ontology authoring in `@osdk/maker`
+2. conversion / backend-oriented compilation in `@osdk/generator-converters*` and `@osdk/maker-experimental`
+3. app bootstrap and deployment in `@osdk/create-app` and `@osdk/cli`
 
-The stack is becoming more coherent, especially with `@osdk/generator-converters.preview`, but there are still obvious mixed public/private edges.
+That story is visible from public sources alone; it does not depend on private repository access.
 
-## Timeline
+## Public source basis
 
-| Approx. first appearance | Package | Why it matters |
-| --- | --- | --- |
-| Nov 2023 | `@osdk/cli` | Earliest public ops/deploy CLI surface |
-| Feb 2024 | `@osdk/create-app` | Public app bootstrap path starts becoming formal |
-| Mar 2024 | `@osdk/maker` | Public ontology authoring DSL appears |
-| Aug 2025 | `@osdk/maker-experimental` | New V2/backend rewrite path becomes visible |
-| Feb 2026 | `@osdk/generator-converters.preview` | First public cross-language discovery + generate-sdk bridge |
-| Feb 2026 | `@osdk/functions-testing.experimental` | Local-first testing/mocking for functions |
-| Mar 2026 | `@osdk/language-models` | Thin Foundry LLM proxy interop helper |
+- `@osdk/maker`: `https://github.com/palantir/osdk-ts/tree/main/packages/maker`
+- `@osdk/maker-experimental`: `https://github.com/palantir/osdk-ts/tree/main/packages/maker-experimental`
+- `@osdk/generator-converters`: `https://github.com/palantir/osdk-ts/tree/main/packages/generator-converters`
+- `@osdk/generator-converters.preview`: `https://github.com/palantir/osdk-ts/tree/main/packages/generator-converters.preview`
+- `@osdk/create-app`: `https://github.com/palantir/osdk-ts/tree/main/packages/create-app`
+- `@osdk/cli`: `https://github.com/palantir/osdk-ts/tree/main/packages/cli`
+- `palantir-mcp`: `https://github.com/palantir/palantir-mcp`
 
-The rough arc is: deploy first, scaffold second, author ontology third, then expose more of the compiler/discovery/testing internals much later.
+## What each layer does
 
-## What each package appears to do
+### `@osdk/maker`: authoring layer
 
-### `@osdk/maker`: public authoring layer
+Public source and changelog history show Maker growing from basic ontology definitions into a broader authoring DSL covering objects, interfaces, actions, imports, links, value handling, and function-oriented workflows.
 
-- This is the real public ontology DSL, not just branding.
-- It owns ontology state and exports the authoring primitives: objects, interfaces, links, actions, value types, and related helpers.
-- Changelog and build output show steady expansion toward a complete ontology-definition language: links/actions as code, datasource variants, structs, media types, markings, PSGs, custom decimals, and function-discovery hooks.
+Relevant public source:
 
-What changed functionally:
+- `https://github.com/palantir/osdk-ts/blob/main/packages/maker/src/api/defineFunction.ts`
 
-- ontology definition moved from mostly generated SDK consumption toward authorable source
-- richer ontology surface area became representable in code
-- function-oriented metadata started to appear in the same ecosystem
+What that supports:
 
-Important limitation:
+- ontology definition is a first-class source-language concern
+- function-related workflows now sit close to the authoring layer
+- the authoring surface is broad enough to act like the front end of a compiler pipeline
 
-- public Maker includes `generateFunctionsIr()`, but TypeScript discovery is not self-contained. It lazy-loads private `@foundry/functions-typescript-osdk-discovery` and fails without it.
-- That means the public package surface promises more than a fully public install can deliver.
+### `@osdk/maker-experimental`: backend-oriented output path
 
-### `@osdk/maker-experimental`: rewrite/backend layer
+Relevant public source:
 
-- This package is smaller because it is not the main authoring DSL.
-- `defineOntologyV2()` directly imports Maker state helpers, runs the ontology body, converts the result, computes shapes, and returns V2 output.
-- The CLI loads `.ontology/ontology.ts`, writes `build/temp_block_data/ontology.json`, and emits a `BlockGeneratorResult` JSON file.
+- `https://github.com/palantir/osdk-ts/blob/main/packages/maker-experimental/src/cli/main.ts`
 
-What changed functionally:
+Publicly visible behavior:
 
-- ontology-as-code gained a second compilation target that looks designed for marketplace/block ingestion
-- RID generation and shape extraction became explicit compiler concerns
-- the public packages now expose evidence of an OAC backend rewrite, not just incremental DSL additions
+- writes `ontology.json`
+- emits `BlockGeneratorResult`
+- layers on top of Maker-owned ontology state
 
-Interpretation:
+That makes it look like a second compilation target focused on structured output artifacts rather than only app-facing authoring.
 
-- this looks like Palantir externalizing a compiler boundary that was previously internal
-- but the artifact shape still feels backend/platform-centric, so it may be ahead of the polished user workflow
+### `@osdk/generator-converters`: normalization layer
 
-### `@osdk/generator-converters`: metadata plumbing
+Relevant public source:
 
-- This is not the glamorous package, but it is where the semantics are normalized.
-- It turns ontology/query structures into the metadata forms expected by SDK generators and related tooling.
-- Recent changes around branch awareness, transaction IDs, and media IO suggest this is where new execution semantics land before they become visible in higher-level tooling.
+- `https://github.com/palantir/osdk-ts/blob/main/packages/generator-converters/src/wireQueryTypeV2ToSdkQueryMetadata.ts`
 
-Interpretation:
+Publicly visible behavior:
 
-- if Maker is the source language, converters are the normalization pass
-- this package is one of the strongest signs that Palantir is treating ontology definitions more like compiler input than static config
+- converts ontology/query structures into SDK-facing metadata
+- captures semantics like branch awareness, transaction IDs, and media query handling
 
-### `@osdk/generator-converters.preview`: discovery + codegen bridge
+This is the package to watch when trying to understand where new execution semantics land first.
 
-- This is the most strategically revealing package in the set.
-- It publishes a `generate-sdk` CLI and explicitly describes itself as supporting Python and TSv2 discovered functions.
-- It accepts Ontology IR JSON, validates the structure, converts it into preview full metadata, optionally discovers functions, then invokes `@osdk/generator`.
+### `@osdk/generator-converters.preview`: discovery-aware bridge
 
-What it adds beyond the older path:
+Relevant public source:
 
-- richer action metadata via `fullLogicRules`
-- query/function metadata stitched into the same output model
-- cross-language discovery hooks for both TypeScript and Python
-- a sidecar `ontology-metadata.json` artifact
+- `https://github.com/palantir/osdk-ts/blob/main/packages/generator-converters.preview/src/cli/generate-sdk.ts`
 
-The Python part is especially interesting:
+Publicly visible behavior:
 
-- the CLI can take `--python-functions-dir`, `--python-root-project-dir`, and `--python-binary`
-- it can generate/install a Python ontology SDK so Python functions can resolve ontology imports during discovery
+- accepts ontology IR
+- enriches metadata
+- supports TypeScript and Python discovery hooks
+- invokes SDK generation from the same flow
 
-Interpretation:
+This is the clearest public sign of an end-to-end codegen pipeline rather than a narrow helper package.
 
-- this is much closer to a unified compiler pipeline: source ontology IR in, metadata enriched with discovered functions, SDK out
-- it still feels preview-grade because the package names and dependencies expose the internal layering pretty directly
+### `@osdk/functions-testing.experimental`: local testing support
 
-### `@osdk/functions-testing.experimental`: local function dev support
+Relevant public source:
 
-- Adds a mock client and mock object helpers.
-- Supports `when(...)`-style stubbing for object/object-set flows and `whenQuery(...)` for query flows.
-- It is intentionally incomplete; some APIs like `fetchMetadata()` still throw unsupported errors.
+- `https://github.com/palantir/osdk-ts/blob/main/packages/functions-testing.experimental/src/mock/createMockClient.ts`
 
-What changed functionally:
+Publicly visible behavior:
 
-- Palantir now appears to expect external developers to write and test OSDK functions locally, not just deploy against a live stack
-- query execution is now treated as something that should be stubbed in unit tests, which matches the broader function-discovery story
+- mock object helpers
+- query stubbing
+- client-level testing ergonomics for local development
 
-### `@osdk/language-models`: LLM proxy helper, not a framework
+That points to a more complete external developer workflow around functions.
 
-- Very thin package.
-- Helps external code reach Foundry's proxied OpenAI/Anthropic endpoints with the right token/base URL plumbing.
+### `@osdk/language-models`: model-proxy interop
 
-Interpretation:
+Relevant public source:
 
-- strategically interesting because it shows AI/LLM workflows being normalized into SDK-adjacent tooling
-- technically small; it is not part of the core compiler stack
+- `https://github.com/palantir/osdk-ts/blob/main/packages/language-models/src/utils.ts`
 
-## Public vs private boundary
+Publicly visible behavior:
 
-### Clearly public
+- wraps fetch / token / base-url helpers around `PlatformClient`
+- acts as plumbing for existing model SDKs rather than a standalone framework
 
-- `@osdk/maker`
-- `@osdk/maker-experimental`
-- `@osdk/generator-converters.preview`
-- `@osdk/generator-converters`
-- `@osdk/create-app`
-- `@osdk/cli`
-- generated namespaces like `@osdk/foundry.thirdpartyapplications` and `@osdk/foundry.aipagents`
+### `@osdk/create-app` and `@osdk/cli`: downstream app path
 
-### Clearly mixed
+Relevant public source:
 
-- Maker's function path depends on private `@foundry/functions-typescript-osdk-discovery`
-- `palantir-mcp` is public but wraps private `@palantir/mcp`
-- some `@osdk/internal.foundry*` packages are technically published but explicitly labeled internal-only
+- `https://github.com/palantir/osdk-ts/blob/main/packages/create-app/src/prompts/promptSdkVersion.ts`
+- `https://github.com/palantir/osdk-ts/blob/main/packages/cli/src/commands/site/deploy/siteDeployCommand.mts`
 
-### What that likely means
+Publicly visible behavior:
 
-- Palantir is publishing the edges that support external ecosystems first
-- but some compiler/discovery capabilities are still shared with or borrowed from internal Developer Console / function-runtime infrastructure
-- the public surface is therefore real, but not yet fully isolated from internal implementation details
+- scaffold application templates around generated SDK lines
+- deploy and version sites through the public CLI
 
-## Likely intended workflow today
+These packages matter, but they sit downstream of the more interesting ontology/compiler shift.
 
-### Best-effort current workflow
+## Boundary notes visible from public sources
 
-1. define ontology in TypeScript with `@osdk/maker`
-2. optionally compile that ontology into V2/block-style artifacts with `@osdk/maker-experimental`
-3. convert IR into richer metadata and discover functions with `@osdk/generator-converters.preview`
-4. generate SDK output with `@osdk/generator`
-5. consume that SDK in an app scaffolded by `@osdk/create-app`
-6. deploy the app/site with `@osdk/cli`, which ultimately talks to third-party-app APIs
+- Maker's TypeScript discovery path is the clearest mixed boundary, because the function path is visible in public source but not fully self-contained in the main public package flow.
+- `palantir-mcp` is a public wrapper package whose implementation is centered on setup and process launch rather than the full runtime.
+- Some registry-visible package families have narrower support signals than the main OSDK packages.
 
-### Why this does not feel fully finished yet
+## Best public-only reading
 
-- there is no single clean public story that starts at Maker and ends at deployment without preview or experimental markers
-- the compiler boundaries are visible in package names and intermediate artifacts
-- TypeScript function discovery still has a private-package dependency
+Even without any private access, the public package set already shows a coherent architecture shift:
 
-## Best explanation of the architecture shift
+- ontology is authored in code
+- metadata is normalized explicitly
+- discovery and code generation are being combined
+- app bootstrap and deployment are downstream consumers of that pipeline
 
-The package history suggests Palantir did not start by opening a polished compiler product. They opened the downstream operational path first, then gradually exposed more authoring and compilation internals:
-
-- first: let people scaffold and deploy
-- then: let people author ontology in code
-- then: expose the rewrite/V2 backend and function-aware codegen pieces
-- now: add local testing and AI-adjacent helpers
-
-That sequencing implies the external OAC workflow is still converging. The direction is clear, though: ontology, functions, SDK generation, app bootstrap, and deployment are being brought into one public developer story.
-
-## Most important practical takeaways
-
-- `@osdk/maker` is the package to watch for the real public ontology DSL.
-- `@osdk/maker-experimental` is the strongest sign of backend/compiler re-architecture.
-- `@osdk/generator-converters.preview` is the strongest sign of a future unified cross-language workflow.
-- `@osdk/functions-testing.experimental` means external function development is becoming a first-class use case.
-- the public/private boundary is still leaky, especially around TypeScript function discovery.
-- `@osdk/create-app` and `@osdk/cli` matter, but they are downstream of the more interesting compiler shift.
-
-## Open questions worth pulling next
-
-- whether `@foundry/functions-typescript-osdk-discovery` eventually becomes public or gets replaced by a public discovery path
-- whether Maker Experimental becomes the default backend for Maker or remains a parallel pipeline
-- whether `generator-converters.preview` graduates into a stable package name and absorbs more of the end-to-end workflow
-- whether Python function discovery becomes more central than TypeScript in the public story because its dependency chain may be easier to externalize cleanly
+That is enough to support the thesis that a public ontology-as-code toolchain is taking shape.

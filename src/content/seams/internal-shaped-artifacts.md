@@ -7,7 +7,6 @@ confidence: medium
 publicSurface:
   - '@osdk/maker-experimental'
   - '@osdk/generator-converters.preview'
-likelyInternalCounterpart: Ontology block packaging, ingestion, and integrated codegen pipelines used by internal tooling.
 evidenceRefs:
   - Maker Experimental CLI emits BlockGeneratorResult and ontology.json
   - generator-converters.preview writes ontology-metadata.json and combines conversion plus discovery plus generation

@@ -23,7 +23,6 @@ const { Content } = await render(entry);
 			{entry.data.publicSurface.map((surface: string) => (
 				<span class="chip">public surface: {surface}</span>
 			))}
-			<span class="chip">likely internal counterpart: {entry.data.likelyInternalCounterpart}</span>
 		</div>
 		<div class="prose">
 			<Content />

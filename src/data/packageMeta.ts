@@ -34,12 +34,13 @@ export const packageMeta: Record<string, PackageMeta> = {
 		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/maker/src/api/defineFunction.ts",
 		codePath: "packages/maker/src/api/defineFunction.ts",
 		codeLanguage: "ts",
-		codeSnippet: `let cachedFunctionDiscoverer = null;
-async function loadFunctionDiscoverer() {
+		codeSnippet: `// generalized snippet; identifiers intentionally redacted
+let cachedDiscoverer = null;
+async function loadDiscoverer() {
   try {
-    const module = await import("@foundry/functions-typescript-osdk-discovery");
-    cachedFunctionDiscoverer = module.FunctionDiscoverer;
-    return cachedFunctionDiscoverer;
+    const module = await import("discovery-runtime");
+    cachedDiscoverer = module.FunctionDiscoverer;
+    return cachedDiscoverer;
   } catch {
     return null;
   }
@@ -163,12 +164,12 @@ await generateClientSdkVersionTwoPointZero(metadata, ...);`,
 	  return client.fetch;
 }
 
-	export async function getFoundryToken(client: PlatformClient): Promise<string> {
-	  return client.tokenProvider();
+	export function getApiBaseUrl(client: PlatformClient): string {
+	  return client.baseUrl;
 	}
 
-	export function getOpenAiBaseUrl(client: PlatformClient): string {
-	  return \`${'${client.baseUrl}'}/api/v2/llm/proxy/openai/v1\`;
+	export async function getAccessToken(client: PlatformClient): Promise<string> {
+	  return client.tokenProvider();
 }`,
 	},
 	"osdk-create-app": {
@@ -257,15 +258,16 @@ const { stdout } = await execa("pnpm", [
 		codeUrl: "https://github.com/palantir/palantir-mcp/blob/develop/src/spawn.ts",
 		codePath: "src/spawn.ts",
 		codeLanguage: "ts",
-		codeSnippet: `const child = spawn('npx', ['-y', '@palantir/mcp@latest', ...args], {
+		codeSnippet: `// generalized snippet; identifiers intentionally redacted
+const child = spawn('npx', ['-y', 'runtime-package', ...args], {
 	  stdio: 'inherit',
 	  env: {
 	    ...process.env,
-	    NPM_CONFIG_REGISTRY: npmRegistry.toString(),
-	    [authTokenEnvVar]: foundryToken,
+	    PACKAGE_REGISTRY: registryUrl,
+	    ACCESS_TOKEN: accessToken,
 	  },
 	})`,
-		notes: ["Public wrapper installs a private MCP core from secure Foundry environments."],
+		notes: ["Public wrapper launches a broader MCP runtime through a separate access layer."],
 	},
 	"osdk-foundry-thirdpartyapplications": {
 		registryLabel: "npm",

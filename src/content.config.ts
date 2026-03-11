@@ -40,7 +40,6 @@ const seams = defineCollection({
 		status: z.enum(["public", "mixed", "private", "experimental", "preview"]),
 		confidence: z.enum(["high", "medium", "low"]),
 		publicSurface: z.array(z.string()).default([]),
-		likelyInternalCounterpart: z.string(),
 		evidenceRefs: z.array(z.string()).default([]),
 	}),
 });
