@@ -5,10 +5,10 @@ Provenance note: this diagram is derived from public package source and public p
 ## Short version
 
 - `@osdk/maker` is the public authoring DSL.
-- `@osdk/maker-experimental` is the newer backend-oriented V2 path layered on top of Maker state.
-- `@osdk/generator-converters` is the metadata conversion layer.
-- `@osdk/generator-converters.preview` is the clearest public bridge from ontology IR to discovery-aware SDK generation.
-- `@osdk/create-app` and `@osdk/cli` sit downstream as app bootstrap and deployment tooling.
+- `@osdk/maker-experimental` extends that flow with a newer backend-oriented V2 path.
+- Convert metadata with `@osdk/generator-converters`.
+- Use `@osdk/generator-converters.preview` to bridge ontology IR to discovery-aware SDK generation.
+- `@osdk/create-app` and `@osdk/cli` provide downstream bootstrap and deployment tooling.
 - The main mixed boundary visible in public source is TypeScript function discovery under Maker.
 
 ## Dependency view

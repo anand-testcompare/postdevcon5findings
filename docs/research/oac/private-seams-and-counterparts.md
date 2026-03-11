@@ -10,7 +10,7 @@ The OSDK/OAC package set is public enough to inspect in detail, but some workflo
 | --- | --- | --- |
 | Deferred runtime dependency | a public package imports part of a workflow lazily instead of shipping it inline | `@osdk/maker` function discovery |
 | Wrapper/launcher package | a public package sets up or launches a broader runtime instead of implementing it end to end | `palantir-mcp` |
-| Registry-visible limited-support package | package metadata is public, but support expectations are explicitly narrow | `@osdk/internal.foundry.*` |
+| Registry-visible limited-support package | package metadata is public, but support expectations are explicitly narrow | internal limited-support package families |
 | Backend-oriented artifact surface | public CLI output looks closer to compiler or platform contracts than app-facing DX | `@osdk/maker-experimental` |
 | Bridge package | one package ties together IR conversion, discovery, and SDK generation | `@osdk/generator-converters.preview` |
 
@@ -46,9 +46,8 @@ What is visible from those sources:
 
 Public evidence:
 
-- `https://www.npmjs.com/package/@osdk/internal.foundry`
-- `https://www.npmjs.com/package/@osdk/internal.foundry.core`
-- `https://www.npmjs.com/package/@osdk/internal.foundry.ontologies`
+- public npm package pages for limited-support package families in the OSDK namespace
+- package descriptions and naming on those public pages
 
 What is visible from those sources:
 

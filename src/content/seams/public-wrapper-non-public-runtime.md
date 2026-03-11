@@ -7,8 +7,10 @@ confidence: high
 publicSurface:
   - 'palantir-mcp'
 evidenceRefs:
-  - The package describes itself as a wrapper/installer rather than the full runtime.
-  - Its public source focuses on setup and launch behavior rather than implementing the full server itself.
+  - npm package `palantir-mcp` describes itself as a lightweight wrapper/installer.
+  - Public source at `palantir/palantir-mcp/src/spawn.ts` shows process launch behavior rather than server implementation.
+  - Public source at `palantir/palantir-mcp/src/preflightChecks.ts` shows setup and validation logic in the public package.
+  - This behavior is visible in the current public `develop` branch and the published npm package.
 ---
 
 This pattern is cleaner than the Maker seam because it is explicit. It shows a public access layer without requiring the full runtime to appear in the same package surface.
