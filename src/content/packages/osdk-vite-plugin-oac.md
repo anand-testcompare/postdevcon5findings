@@ -14,7 +14,7 @@ keyTakeaways:
 topicIds:
   - oac-compiler-stack
 seamIds:
-  - public-wrapper-private-core
+  - public-wrapper-non-public-runtime
 ---
 
 `@osdk/vite-plugin-oac` matters because it does more than expose config. It explicitly orchestrates three steps: ontology source to IR, IR to full metadata, and full metadata to generated OSDK output.

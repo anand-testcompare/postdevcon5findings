@@ -1,5 +1,5 @@
 ---
-title: Public Wrapper Around Private Core
+title: Public Wrapper Around Non-Public Runtime
 summary: Some packages are intentionally public as installers or access layers while the full runtime remains outside the visible package surface.
 seamType: public wrapper around non-public runtime
 status: mixed

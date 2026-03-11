@@ -34,7 +34,8 @@ export const packageMeta: Record<string, PackageMeta> = {
 		codeUrl: "https://github.com/palantir/osdk-ts/blob/main/packages/maker/src/api/defineFunction.ts",
 		codePath: "packages/maker/src/api/defineFunction.ts",
 		codeLanguage: "ts",
-		codeSnippet: `let cachedDiscoverer = null;
+		codeSnippet: `// generalized snippet; identifiers intentionally redacted
+let cachedDiscoverer = null;
 async function loadDiscoverer() {
   try {
     const module = await import("discovery-runtime");
@@ -257,7 +258,8 @@ const { stdout } = await execa("pnpm", [
 		codeUrl: "https://github.com/palantir/palantir-mcp/blob/develop/src/spawn.ts",
 		codePath: "src/spawn.ts",
 		codeLanguage: "ts",
-		codeSnippet: `const child = spawn('npx', ['-y', 'runtime-package', ...args], {
+		codeSnippet: `// generalized snippet; identifiers intentionally redacted
+const child = spawn('npx', ['-y', 'runtime-package', ...args], {
 	  stdio: 'inherit',
 	  env: {
 	    ...process.env,

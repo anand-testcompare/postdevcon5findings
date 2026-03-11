@@ -15,7 +15,7 @@ keyTakeaways:
 topicIds:
   - public-private-seams
 seamIds:
-  - public-wrapper-private-core
+  - public-wrapper-non-public-runtime
 ---
 
 This package is useful as a contrast case.

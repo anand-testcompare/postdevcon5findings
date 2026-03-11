@@ -10,8 +10,8 @@ relatedPackages:
   - osdk-generator-converters-preview
 relatedSeams:
   - maker-ts-discovery
-  - public-wrapper-private-core
-  - internal-only-npm
+  - public-wrapper-non-public-runtime
+  - support-level-boundary-packages
   - internal-shaped-artifacts
 ---
 
