@@ -38,7 +38,7 @@ export const timelineEvents = [
 
 export const homepageHighlights = [
 	"Maker is now a broad public ontology-as-code DSL covering authoring, actions, imports, and discovery-related workflows.",
-	"The biggest visible seam is TypeScript function discovery, which still depends on a private runtime package.",
+	"The biggest visible seam is TypeScript function discovery, which is still not fully packaged as a standalone public workflow.",
 	"Maker Experimental exposes backend-oriented artifacts and shape generation on top of Maker state.",
 	"generator-converters.preview is the clearest public bridge from ontology IR to discovery-aware SDK generation.",
 	"App bootstrap and deployment are public, but they sit downstream of the more interesting compiler shift.",

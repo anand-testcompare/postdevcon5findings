@@ -72,20 +72,20 @@ Create dossiers for at least these packages/entities:
 
 Create a dedicated seam index covering:
 
-- hard private runtime dependencies
-- public wrappers around private packages
-- internal-only packages published on npm
+- incomplete public workflows
+- public wrappers around broader runtimes
+- registry-visible packages with mixed support levels
 - internal-shaped output artifacts
 
 ### Evidence pages
 
 At minimum, expose curated evidence for:
 
-- Maker private import path
+- Maker function-discovery boundary
 - Maker Experimental `BlockGeneratorResult`
 - preview converter `generate-sdk` behavior
-- internal-only `@osdk/internal.foundry.*` npm metadata
-- `palantir-mcp` description referencing private `@palantir/mcp`
+- support-level differences across related package families
+- `palantir-mcp` positioning as a wrapper layer
 
 ## Suggested content collections
 
@@ -129,7 +129,6 @@ Suggested fields:
 - `status`
 - `confidence`
 - `publicSurface`
-- `likelyInternalCounterpart`
 - `evidenceRefs`
 
 ### `evidence`

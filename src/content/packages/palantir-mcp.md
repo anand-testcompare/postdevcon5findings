@@ -1,6 +1,6 @@
 ---
 title: palantir-mcp
-summary: A public wrapper package that authenticates against a Foundry-hosted npm registry and launches the private `@palantir/mcp` package.
+summary: A public wrapper package that sets up access to a broader MCP runtime rather than implementing that runtime itself.
 packageName: palantir-mcp
 kind: wrapper installer
 status: mixed
@@ -8,10 +8,10 @@ importance: high
 firstSeen: 2025-01
 repo: https://github.com/palantir/palantir-mcp
 keyTakeaways:
-  - Public package explicitly states that it wraps private `@palantir/mcp`.
-  - Handles token refresh, package availability checks, registry URL construction, and process spawning.
+  - Public package explicitly positions itself as a wrapper/installer layer.
+  - Handles setup, preflight checks, and process launch behavior.
   - Cleaner seam than Maker because the boundary is documented instead of hidden.
-  - Strong evidence of Palantir publishing access tooling without fully publishing the runtime core.
+  - Strong evidence of Palantir publishing access tooling separately from the full runtime.
 topicIds:
   - public-private-seams
 seamIds:
@@ -20,6 +20,6 @@ seamIds:
 
 This package is useful as a contrast case.
 
-Unlike the Maker seam, where the private dependency shows up through a lazy-loaded import, `palantir-mcp` describes its own boundary clearly. It checks connectivity and token validity, constructs a Foundry-hosted npm registry URL, then launches `npx @palantir/mcp@latest` with the right registry auth injected.
+Unlike the Maker seam, where the boundary shows up inside a function-discovery path, `palantir-mcp` describes its own boundary clearly. Its public source is focused on preflight checks and process launch behavior rather than implementing the full MCP runtime directly.
 
-That makes it a good example of a public wrapper around a private core: the public package is useful on its own, while the MCP server remains inside the secure environment.
+That makes it a good example of a public wrapper around a broader runtime surface: the public package is useful on its own, while the full runtime remains outside the main package implementation.

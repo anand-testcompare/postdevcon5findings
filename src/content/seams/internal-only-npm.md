@@ -1,17 +1,15 @@
 ---
-title: Internal-Only Packages Published on npm
-summary: Some packages are published on npm but explicitly label themselves as internal-only, which weakens any simple public-versus-private reading of the ecosystem.
-seamType: published but explicitly internal
+title: Support-Level Boundary Packages
+summary: Some packages are visible in registries or release machinery but are not framed as normal public developer entry points.
+seamType: visible package with limited public support
 status: mixed
 confidence: high
 publicSurface:
-  - '@osdk/internal.foundry'
-  - '@osdk/internal.foundry.core'
-  - '@osdk/internal.foundry.ontologies'
-likelyInternalCounterpart: Broader generated Foundry client layers and unsupported internal SDK substrates.
+  - generated namespace packages
+  - lower-level registry artifacts
 evidenceRefs:
-  - package descriptions literally say This is an internal only package
-  - repository metadata points to public foundry-platform-typescript
+  - some registry-visible packages are not presented as ordinary public developer surfaces
+  - package visibility and support level do not always match one-to-one
 ---
 
 This pattern matters because it shows package visibility is not the same thing as supportability. A package being on npm does not automatically make it a public contract.
